@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bootstrap demo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link href="node_modules/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+
+<body class="container-xxl bd-gutter py-3">
+  <style>
+    .fs-filemanager-thumbnails-item-content {
+      padding: 0 1rem 0 1rem;
+      text-align: center;
+    }
+
+    .folder {
+      list-style-type: none;
+      cursor: pointer;
+    }
+
+    .folder-icon {
+      margin-right: 5px;
+    }
+
+    .toggle-icon {
+      cursor: pointer;
+    }
+
+    .folder ul {
+      display: none;
+    }
+
+    .folder.open>ul {
+      display: block;
+    }
+
+    #folder-tree {
+      margin-left: -1.5rem;
+    }
+
+    ul {
+      padding-left: 1rem !important;
+      background: #fff;
+
+    }
+
+    .fs-icon {
+      border: 0;
+      width: 38px;
+      height: 48px;
+      font-size: 48px;
+      object-fit: cover;
+    }
+
+    .fs-filemanager-thumbnails-item-name {
+      padding: .3rem 0;
+    }
+
+    .open.selected {
+      background: #ebebeb;
+    }
+  </style>
+
+
+
+  <div class="d-flex flex-column border">
+    <div class="d-flex flex-row py-2 ps-4">
+
+      <a class="nav-link link-body-emphasis" href="#">
+        <div class="px-2 d-flex flex-row">
+          <i class="bi bi-folder-plus"></i>
+          <div class="px-2">Створити теку</div>
+        </div>
+      </a>
+
+      <a class="nav-link link-body-emphasis" href="#">
+        <div class="px-2 d-flex flex-row">
+          <i class="bi bi-file-earmark-plus"></i>
+          <div class="px-2">Створити файл</div>
+        </div>
+      </a>
+
+      <a class="nav-link link-body-emphasis" href="#">
+        <div class="px-2 d-flex flex-row">
+          <svg width="16px" height="18px" viewBox="0 0 16 18" style="margin-top: 4px;" version="1.1"
+            xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+              <g id="file-earmark-arrow-up" fill="#000000" fill-rule="nonzero">
+                <path
+                  d="M6.5,11.5 C6.5,11.7761424 6.27614237,12 6,12 C5.72385763,12 5.5,11.7761424 5.5,11.5 L5.5,7.707 L4.354,8.854 C4.1584912,9.0495088 3.8415088,9.0495088 3.646,8.854 C3.4504912,8.6584912 3.4504912,8.3415088 3.646,8.146 L5.646,6.146 C5.73980426,6.0519583 5.86717274,5.99910622 6,5.99910622 C6.13282726,5.99910622 6.26019574,6.0519583 6.354,6.146 L8.354,8.146 C8.5495088,8.3415088 8.5495088,8.6584912 8.354,8.854 C8.1584912,9.0495088 7.8415088,9.0495088 7.646,8.854 L6.5,7.707 L6.5,11.5 Z"
+                  id="Path"
+                  transform="translate(6.000000, 8.999553) rotate(90.000000) translate(-6.000000, -8.999553) "></path>
+                <path
+                  d="M12,14 L12,4.5 L7.5,0 L2,0 C0.8954305,0 0,0.8954305 0,2 L0,14 C0,15.1045695 0.8954305,16 2,16 L10,16 C11.1045695,16 12,15.1045695 12,14 Z M7.5,3 C7.5,3.82842712 8.17157288,4.5 9,4.5 L11,4.5 L11,14 C11,14.5522847 10.5522847,15 10,15 L2,15 C1.44771525,15 1,14.5522847 1,14 L1,2 C1,1.44771525 1.44771525,1 2,1 L7.5,1 L7.5,3 Z"
+                  id="Shape"></path>
+              </g>
+            </g>
+          </svg>
+          <div class="px-2">Перемістити</div>
+        </div>
+      </a>
+
+      <a class="nav-link link-body-emphasis" href="#">
+        <div class="px-2 d-flex flex-row">
+          <i class="bi bi-clipboard-check"></i>
+          <div class="px-2">Копіювати</div>
+        </div>
+      </a>
+
+      <a class="nav-link link-body-emphasis" href="#">
+        <div class="px-2 d-flex flex-row">
+          <i class="bi bi-file-check"></i>
+          <div class="px-2">Перейменувати</div>
+        </div>
+      </a>
+
+      <a class="nav-link link-body-emphasis" href="#">
+        <div class="px-2 d-flex flex-row">
+          <i class="bi bi-trash-fill"></i>
+          <div class="px-2">Видалити</div>
+        </div>
+      </a>
+
+      <a class="nav-link link-body-emphasis" href="#">
+        <div class="px-2 d-flex flex-row">
+          <i class="bi bi-file-earmark-arrow-down"></i>
+          <div class="px-2">Завантажити</div>
+        </div>
+      </a>
+
+      <a class="nav-link link-body-emphasis" href="#">
+        <div class="px-2 d-flex flex-row">
+          <i class="bi bi-file-earmark-arrow-up"></i>
+          <div class="px-2">Завантажити файли</div>
+        </div>
+      </a>
+
+      <div class="px-2">
+
+      </div>
+      <div class="px-2">
+
+      </div>
+
+    </div>
+    <div class="d-flex flex-row border" style="min-height: 50rem;">
+      <div class="col-3 border px-4 py-3">
+
+        <ul id="folder-tree" class="open"></ul>
+
+      </div>
+      <div class="col-9 border d-flex flex-column">
+
+        <div class="d-flex flex-row py-2 ps-2">
+          <div class="ps-2 pe-3 border-end">
+            <svg width="11px" height="16px" viewBox="0 0 11 16" version="1.1" xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink">
+              <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                <g id="arrow-up" transform="translate(1.000000, 1.000000)" fill="#000000" fill-rule="nonzero"
+                  stroke="#000000">
+                  <path
+                    d="M4.500643,14.0008938 C4.77678538,14.0008938 5.000643,13.7770362 5.000643,13.5008938 L5.000643,1.70789378 L8.146643,4.85489378 C8.34215181,5.05040259 8.6591342,5.05040259 8.854643,4.85489378 C9.05015181,4.65938498 9.05015181,4.34240259 8.854643,4.14689378 L4.854643,0.146893784 C4.76083874,0.052852083 4.63347026,0 4.500643,0 C4.36781574,0 4.24044727,0.052852083 4.146643,0.146893784 L0.146643004,4.14689378 C0.0201709849,4.2733658 -0.029221961,4.45770279 0.0170700108,4.63046678 C0.0633619825,4.80323077 0.19830602,4.9381748 0.371070011,4.98446678 C0.543834001,5.03075875 0.728170985,4.9813658 0.854643004,4.85489378 L4.000643,1.70789378 L4.000643,13.5008938 C4.000643,13.7770362 4.22450063,14.0008938 4.500643,14.0008938 Z"
+                    id="Path"></path>
+                </g>
+              </g>
+            </svg>
+          </div>
+          <div class="ps-3 pe-2">Files</div>
+          <div class="px-2">
+            <i class="bi bi-caret-right-fill"></i>
+          </div>
+          <div class="px-2">Images</div>
+        </div>
+
+        <div id="fs-panel" class="border d-flex flex-row p-4" style="min-height: 50rem;">
+          <!--
+          <div class="fs-filemanager-thumbnails-item"
+            title="Ім’я файлу: documents Шлях: undefined Дата зміни: Mon Jun 12 2023 09:59:11 GMT+0200 (Центральная Европа, летнее время)">
+            <div class="fs-filemanager-thumbnails-item-content">
+              <img src="https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/thumbnails/folder.svg"
+                class="dx-icon dx-filemanager-thumbnails-item-thumbnail dx-filemanager-item-custom-thumbnail">
+              <div class="dx-filemanager-thumbnails-item-spacer"></div>
+              <div class="fs-filemanager-thumbnails-item-name">..</div>
+            </div>
+          </div>
+
+          <div class="fs-filemanager-thumbnails-item"
+            title="Ім’я файлу: documents Шлях: undefined Дата зміни: Mon Jun 12 2023 09:59:11 GMT+0200 (Центральная Европа, летнее время)">
+            <div class="fs-filemanager-thumbnails-item-content">
+              <img src="https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/thumbnails/folder.svg"
+                class="dx-icon dx-filemanager-thumbnails-item-thumbnail dx-filemanager-item-custom-thumbnail">
+              <div class="dx-filemanager-thumbnails-item-spacer"></div>
+              <div class="fs-filemanager-thumbnails-item-name">documents</div>
+            </div>
+          </div>
+
+          <div class="dx-filemanager-thumbnails-item"
+            title="Ім’я файлу: f 2.sh Тип: sh Розмір: 0 B Шлях: undefined Дата зміни: Mon Jun 12 2023 17:27:58 GMT+0200 (Центральная Европа, летнее время)">
+            <div class="fs-filemanager-thumbnails-item-content">
+              <img src="./image/sh.svg"
+                class="fs-icon dx-filemanager-thumbnails-item-thumbnail dx-filemanager-item-custom-thumbnail">
+              <div class="dx-filemanager-thumbnails-item-spacer"></div>
+              <div class="fs-filemanager-thumbnails-item-name">f 2.sh</div>
+            </div>
+          </div>
+
+          <div class="dx-filemanager-thumbnails-item"
+            title="Ім’я файлу: documents Шлях: undefined Дата зміни: Mon Jun 12 2023 09:59:11 GMT+0200 (Центральная Европа, летнее время)">
+            <div class="fs-filemanager-thumbnails-item-content">
+              <img src="https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/thumbnails/folder.svg"
+                class="dx-icon dx-filemanager-thumbnails-item-thumbnail dx-filemanager-item-custom-thumbnail">
+              <div class="dx-filemanager-thumbnails-item-spacer"></div>
+              <div class="fs-filemanager-thumbnails-item-name">documents</div>
+            </div>
+          </div>
+-->
+        </div>
+
+
+
+      </div>
+    </div>
+    <div class="border">4</div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+    integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS"
+    crossorigin="anonymous"></script>
+
+  <script>
+    var fileSystem = [
+      {
+        name: "Documents",
+        isDirectory: true,
+        items: [
+          {
+            name: "Projects",
+            isDirectory: true,
+            items: [
+              {
+                name: "About.rtf",
+                isDirectory: false,
+                size: 1024
+              },
+              {
+                name: "Passwords.rtf",
+                isDirectory: false,
+                size: 2048
+              }
+            ]
+          },
+          {
+            name: "About.xml",
+            isDirectory: false,
+            size: 1024
+          },
+          {
+            name: "Managers.rtf",
+            isDirectory: false,
+            size: 2048
+          },
+          {
+            name: "ToDo.txt",
+            isDirectory: false,
+            size: 3072
+          },
+          {
+            name: "Images",
+            isDirectory: true,
+            items: [
+              {
+                name: "logo.png",
+                isDirectory: false,
+                size: 20480
+              },
+              {
+                name: "banner.gif",
+                isDirectory: false,
+                size: 10240
+              }
+            ]
+          },
+          {
+            name: "System",
+            isDirectory: true,
+            items: [
+              {
+                name: "Employees",
+                isDirectory: true,
+                items: []
+              },
+              {
+                name: "Employees.txt",
+                isDirectory: false,
+                size: 3072
+              },
+              {
+                name: "PasswordList.txt",
+                isDirectory: false,
+                size: 5120
+              }
+            ]
+          },
+          {
+            name: "Description.rtf",
+            isDirectory: false,
+            size: 1024
+          },
+          {
+            name: "Description.txt",
+            isDirectory: false,
+            size: 2048
+          }
+        ],
+      }
+    ];
+
+
+
+    //Побудова топології
+    function buildFileSystemTree(fileSystem, parentElement) {
+      var ul = document.createElement('ul');
+
+      fileSystem.forEach(function (item) {
+        if (item.isDirectory) {
+          var li = document.createElement('li');
+          li.classList.add('folder');
+          li.classList.add('my-1');
+
+          var toggleIcon = document.createElement('span');
+          toggleIcon.classList.add('toggle-icon');
+          toggleIcon.innerHTML = '<i class="bi bi-caret-right-fill pe-1"></i>';
+          li.appendChild(toggleIcon);
+
+          var folderIcon = document.createElement('span');
+          folderIcon.classList.add('folder-icon');
+          folderIcon.innerHTML = '<i class="bi bi-folder"></i>';
+          li.appendChild(folderIcon);
+
+          var nameSpan = document.createElement('span');
+          nameSpan.innerText = item.name;
+          li.appendChild(nameSpan);
+
+          if (item.items && item.items.length > 0) {
+            buildFileSystemTree(item.items, li);
+          }
+
+          ul.appendChild(li);
+        }
+      });
+
+      parentElement.appendChild(ul);
+    }
+
+
+    // Використання функції
+    var folderTree = document.getElementById('folder-tree');
+    buildFileSystemTree(fileSystem, folderTree);
+
+    // Відкриття першої теки в топології за замовчуванням
+    var firstLevelFolder = folderTree.querySelector('.folder');
+    var toggleIcon = firstLevelFolder.querySelector('.toggle-icon');
+    var subfolders = firstLevelFolder.querySelector('ul');
+    if (subfolders) {
+      firstLevelFolder.classList.add('open');
+      toggleIcon.innerHTML = '<i class="bi bi-caret-down-fill pe-1"></i>';
+      firstLevelFolder.querySelector('.folder-icon').innerHTML = '<i class="bi bi-folder2-open"></i>';
+    }
+
+    // Топологія
+    document.addEventListener('DOMContentLoaded', function () {
+      var toggleIcons = document.querySelectorAll('.toggle-icon');
+      toggleIcons.forEach(function (icon) {
+        icon.addEventListener('click', function () {
+          var folder = this.parentNode;
+          var subfolders = folder.querySelectorAll('.folder');
+          subfolders.forEach(function (subfolder) {
+            subfolder.classList.remove('open');
+            subfolder.querySelector('.toggle-icon').innerHTML = '<i class="bi bi-caret-right-fill pe-1"></i>';
+            subfolder.querySelector('.folder-icon').innerHTML = '<i class="bi bi-folder"></i>';
+          });
+          if (folder.classList.contains('open')) {
+            folder.classList.remove('open');
+            this.innerHTML = '<i class="bi bi-caret-right-fill pe-1"></i>';
+            folder.querySelector('.folder-icon').innerHTML = '<i class="bi bi-folder"></i>';
+          } else {
+            folder.classList.add('open');
+            this.innerHTML = '<i class="bi bi-caret-down-fill pe-1"></i>';
+            folder.querySelector('.folder-icon').innerHTML = '<i class="bi bi-folder2-open"></i>';
+          }
+        });
+      });
+
+      // Відстеження натискання на ім’я теки в топології та показ вмісту
+      var folderNames = document.querySelectorAll('.folder span:not(.toggle-icon)');
+      var fsPanel = document.getElementById('fs-panel');
+
+      folderNames.forEach(function (folderName) {
+        folderName.addEventListener('click', function (event) {
+          event.stopPropagation(); // Зупинка спливання події
+
+          var selectedFolder = this.parentNode;
+          var selectedName = this.innerText;
+
+          // Перевіряємо, чи розгорнуто теку
+          var isExpanded = selectedFolder.classList.contains('open');
+
+          // Знімаємо виділення з усіх тек
+          var allFolders = document.querySelectorAll('.folder');
+          allFolders.forEach(function (folder) {
+            folder.classList.remove('selected');
+          });
+
+          // Додаємо виділення вибраній теці
+          selectedFolder.classList.add('selected');
+
+          // Якщо теку не розгорнуто, додаємо клас 'open' і міняємо іконку
+          if (!isExpanded) {
+            selectedFolder.classList.add('open');
+            selectedFolder.querySelector('.toggle-icon').innerHTML = '<i class="bi bi-caret-down-fill pe-1"></i>';
+            selectedFolder.querySelector('.folder-icon').innerHTML = '<i class="bi bi-folder2-open"></i>';
+          }
+
+          // Показуємо вміст теки в елементі з id="fs-panel"
+          var folderContent = getFolderContent(selectedName);
+          fsPanel.innerHTML = folderContent;
+        });
+      });
+
+      // Функція для отримання вмісту теки
+      function getFolderContent(folderName) {
+        var folderContent = '';
+
+        // Шукаємо теку в масиві fileSystem
+        var folder = findFolder(fileSystem, folderName);
+
+        // Якщо теку знайдено, отримуємо вміст
+        if (folder) {
+          folderContent += '<div class="fs-filemanager-thumbnails-item" title="Ім’я файлу: ' + folder.name + ' Шлях: undefined Дата зміни: ' + new Date().toString() + '">';
+          folderContent += '<div class="fs-filemanager-thumbnails-item-content">';
+          folderContent += '<img src="https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/thumbnails/folder.svg" class="dx-icon dx-filemanager-thumbnails-item-thumbnail dx-filemanager-item-custom-thumbnail">';
+          folderContent += '<div class="dx-filemanager-thumbnails-item-spacer"></div>';
+          folderContent += '<div class="fs-filemanager-thumbnails-item-name">..</div>';
+          folderContent += '</div>';
+          folderContent += '</div>';
+
+          if (folder.items && folder.items.length > 0) {
+            folder.items.forEach(function (item) {
+              if (item.isDirectory) {
+                folderContent += '<div class="fs-filemanager-thumbnails-item" title="Ім’я файлу: ' + item.name + ' Шлях: undefined Дата зміни: ' + new Date().toString() + '">';
+                folderContent += '<div class="fs-filemanager-thumbnails-item-content">';
+                folderContent += '<img src="https://js.devexpress.com/Demos/WidgetsGallery/JSDemos/images/thumbnails/folder.svg" class="dx-icon dx-filemanager-thumbnails-item-thumbnail dx-filemanager-item-custom-thumbnail">';
+                folderContent += '<div class="dx-filemanager-thumbnails-item-spacer"></div>';
+                folderContent += '<div class="fs-filemanager-thumbnails-item-name">' + item.name + '</div>';
+                folderContent += '</div>';
+                folderContent += '</div>';
+              } else {
+                folderContent += '<div class="dx-filemanager-thumbnails-item" title="Ім’я файлу: ' + item.name + ' Тип: ' + getFileExtension(item.name) + ' Розмір: ' + item.size + ' B Шлях: undefined Дата зміни: ' + new Date().toString() + '">';
+                folderContent += '<div class="fs-filemanager-thumbnails-item-content">';
+                folderContent += '<img src="./image/' + getFileExtension(item.name) + '.svg" class="fs-icon dx-filemanager-thumbnails-item-thumbnail dx-filemanager-item-custom-thumbnail">';
+                folderContent += '<div class="dx-filemanager-thumbnails-item-spacer"></div>';
+                folderContent += '<div class="fs-filemanager-thumbnails-item-name">' + item.name + '</div>';
+                folderContent += '</div>';
+                folderContent += '</div>';
+              }
+            });
+          }
+        }
+
+        return folderContent;
+      }
+
+      // Функція для пошуку теки в масиві fileSystem
+      function findFolder(fileSystem, folderName) {
+        for (var i = 0; i < fileSystem.length; i++) {
+          var item = fileSystem[i];
+          if (item.name === folderName && item.isDirectory) {
+            return item;
+          } else if (item.items && item.items.length > 0) {
+            var subfolder = findFolder(item.items, folderName);
+            if (subfolder) {
+              return subfolder;
+            }
+          }
+        }
+        return null;
+      }
+
+      // Функція для отримання розширення файлу
+      function getFileExtension(filename) {
+        return filename.split('.').pop();
+      }
+
+    });
+
+  </script>
+
+</html>

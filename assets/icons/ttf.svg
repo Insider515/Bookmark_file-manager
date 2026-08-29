@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="38px" viewBox="0 0 30 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>ttf</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#929292" offset="0%"></stop>
+            <stop stop-color="#3B3B3B" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="ttf">
+            <rect id="Rectangle-Copy-6" fill="url(#linearGradient-1)" x="0" y="0" width="30" height="38"></rect>
+            <line x1="6.5" y1="17" x2="23.5" y2="17" id="Line-Copy-24" stroke-opacity="0.5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="square"></line>
+            <line x1="6.5" y1="21" x2="23.5" y2="21" id="Line-Copy-25" stroke-opacity="0.5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="square"></line>
+            <line x1="6.5" y1="25" x2="23.5" y2="25" id="Line-Copy-26" stroke-opacity="0.5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="square"></line>
+            <line x1="6.5" y1="29" x2="18" y2="29" id="Line-Copy-27" stroke-opacity="0.5" stroke="#FFFFFF" stroke-width="2" stroke-linecap="square"></line>
+            <text id="TTF" font-family="Helvetica-Bold, Helvetica" font-size="10" font-weight="bold" letter-spacing="0.752381" fill="#FFFFFF">
+                <tspan x="4.70883084" y="12">TTF</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

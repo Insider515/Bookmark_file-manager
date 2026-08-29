@@ -1,0 +1,2720 @@
+/**
+ * bookmark-file-manager styles.
+ *
+ * Everything is scoped under .fsfm and driven by custom properties, so the
+ * widget neither inherits nor leaks styles when embedded in a host page.
+ * Override any --fsfm-* variable on .fsfm (or a parent) to retheme.
+ */
+
+.fsfm {
+  --fsfm-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    'Noto Sans', sans-serif;
+  --fsfm-font-size: 14px;
+
+  --fsfm-bg: #ffffff;
+  --fsfm-bg-subtle: #f7f8fa;
+  --fsfm-bg-sunken: #f1f3f5;
+  --fsfm-border: #dfe3e8;
+  --fsfm-border-strong: #c4cad2;
+
+  --fsfm-text: #1f2328;
+  --fsfm-text-muted: #656d76;
+  --fsfm-text-inverse: #ffffff;
+  /* Text drawn on top of the accent colour. Separate from --fsfm-text-inverse
+     because that one is also used on the danger red: a theme whose accent is
+     light needs dark text here while red still wants white. */
+  --fsfm-accent-contrast: #ffffff;
+
+  --fsfm-accent: #1a73e8;
+  --fsfm-accent-hover: #1660c9;
+  --fsfm-accent-soft: #e8f0fe;
+  --fsfm-danger: #d93025;
+  --fsfm-danger-hover: #b3271d;
+  --fsfm-success: #188038;
+  /* Used where a result is incomplete — truncated or stopped by a deadline.
+     Distinct from danger: nothing failed, the answer is just partial. */
+  --fsfm-warning: #b26a00;
+  /* The terminal sits below the file list and reads as a different surface. */
+  --fsfm-term-bg: #f5f7f9;
+
+  --fsfm-radius: 6px;
+  --fsfm-radius-lg: 10px;
+  --fsfm-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 4px 12px rgba(16, 24, 40, 0.08);
+  --fsfm-shadow-lg: 0 8px 32px rgba(16, 24, 40, 0.18);
+
+  --fsfm-sidebar-width: 260px;
+  --fsfm-tile-width: 116px;
+  --fsfm-row-height: 34px;
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 320px;
+  height: 100%;
+  overflow: hidden;
+  /* Breakpoints below are keyed to the widget's own width, not the viewport's:
+     an embedded manager may sit in a narrow column on a wide screen. */
+  container-type: inline-size;
+  container-name: fsfm;
+  box-sizing: border-box;
+  font-family: var(--fsfm-font);
+  font-size: var(--fsfm-font-size);
+  line-height: 1.45;
+  color: var(--fsfm-text);
+  background: var(--fsfm-bg);
+  border: 1px solid var(--fsfm-border);
+  border-radius: var(--fsfm-radius-lg);
+}
+
+.fsfm *,
+.fsfm *::before,
+.fsfm *::after {
+  box-sizing: border-box;
+}
+
+/* Component rules set an explicit `display`, which outranks the user agent's
+   `[hidden] { display: none }`. Without this, hiding a button by setting
+   `hidden` would leave it on screen. */
+.fsfm [hidden] {
+  display: none !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  .fsfm:not(.fsfm-light) {
+    --fsfm-bg: #16191d;
+    --fsfm-bg-subtle: #1c2024;
+    --fsfm-bg-sunken: #212529;
+    --fsfm-border: #2f353c;
+    --fsfm-border-strong: #434a52;
+
+    --fsfm-text: #e6e9ed;
+    --fsfm-text-muted: #9aa4af;
+
+    /* Amber rather than blue. On the dark background it reads at 9.6:1, well
+       past the 4.5:1 threshold; the same colour on the light theme would be
+       1.8:1, which is why only the dark theme uses it. */
+    --fsfm-accent: #f0b608;
+    --fsfm-accent-hover: #ffc82a;
+    --fsfm-accent-soft: #3f3b1d;
+    --fsfm-accent-contrast: #16191d;
+
+    --fsfm-tok-comment: #7d8590;
+    --fsfm-tok-string: #7ee787;
+    --fsfm-tok-number: #ffa657;
+    --fsfm-tok-keyword: #ff7b72;
+    --fsfm-tok-type: #79c0ff;
+    --fsfm-tok-builtin: #ffa657;
+    --fsfm-tok-tag: #7ee787;
+    --fsfm-tok-attr: #d2a8ff;
+    --fsfm-tok-property: #79c0ff;
+    --fsfm-tok-variable: #ffa657;
+    --fsfm-tok-operator: #a5b1c2;
+    --fsfm-tok-punctuation: #8b949e;
+    --fsfm-tok-heading: #79c0ff;
+    --fsfm-tok-link: #7ee787;
+    --fsfm-tok-meta: #d2a8ff;
+    --fsfm-danger: #f2645a;
+    --fsfm-danger-hover: #ff7b71;
+    --fsfm-success: #45c26a;
+    --fsfm-warning: #e3a008;
+    --fsfm-term-bg: #0d1117;
+
+    --fsfm-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.35);
+    --fsfm-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.55);
+  }
+}
+
+.fsfm.fsfm-dark {
+  --fsfm-bg: #16191d;
+  --fsfm-bg-subtle: #1c2024;
+  --fsfm-bg-sunken: #212529;
+  --fsfm-border: #2f353c;
+  --fsfm-border-strong: #434a52;
+  --fsfm-text: #e6e9ed;
+  --fsfm-text-muted: #9aa4af;
+  --fsfm-accent: #f0b608;
+  --fsfm-accent-hover: #ffc82a;
+  --fsfm-accent-soft: #3f3b1d;
+  --fsfm-accent-contrast: #16191d;
+
+  --fsfm-tok-comment: #7d8590;
+  --fsfm-tok-string: #7ee787;
+  --fsfm-tok-number: #ffa657;
+  --fsfm-tok-keyword: #ff7b72;
+  --fsfm-tok-type: #79c0ff;
+  --fsfm-tok-builtin: #ffa657;
+  --fsfm-tok-tag: #7ee787;
+  --fsfm-tok-attr: #d2a8ff;
+  --fsfm-tok-property: #79c0ff;
+  --fsfm-tok-variable: #ffa657;
+  --fsfm-tok-operator: #a5b1c2;
+  --fsfm-tok-punctuation: #8b949e;
+  --fsfm-tok-heading: #79c0ff;
+  --fsfm-tok-link: #7ee787;
+  --fsfm-tok-meta: #d2a8ff;
+
+  --fsfm-danger: #f2645a;
+  --fsfm-danger-hover: #ff7b71;
+  --fsfm-success: #45c26a;
+  --fsfm-warning: #e3a008;
+  --fsfm-term-bg: #0d1117;
+  --fsfm-shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.35);
+  --fsfm-shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.55);
+}
+
+/* ------------------------------------------------------------------ toolbar */
+
+.fsfm-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  padding: 6px 8px;
+  background: var(--fsfm-bg-subtle);
+  border-bottom: 1px solid var(--fsfm-border);
+}
+
+.fsfm-tool {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  font: inherit;
+  color: var(--fsfm-text);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--fsfm-radius);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.12s ease, border-color 0.12s ease, opacity 0.12s ease;
+}
+
+.fsfm-tool:hover:not(:disabled) {
+  background: var(--fsfm-bg-sunken);
+  border-color: var(--fsfm-border);
+}
+
+.fsfm-tool:active:not(:disabled) {
+  background: var(--fsfm-border);
+}
+
+.fsfm-tool:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.fsfm-tool:focus-visible,
+.fsfm-crumb:focus-visible,
+.fsfm-crumb-up:focus-visible,
+.fsfm-entry:focus-visible,
+.fsfm-tree-row:focus-visible,
+.fsfm-menu-item:focus-visible,
+.fsfm-btn:focus-visible,
+.fsfm-input:focus-visible,
+.fsfm-search:focus-visible,
+.fsfm-list:focus-visible {
+  outline: 2px solid var(--fsfm-accent);
+  outline-offset: -1px;
+}
+
+.fsfm-tool-icon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--fsfm-text-muted);
+}
+
+.fsfm-tool:hover:not(:disabled) .fsfm-tool-icon {
+  color: var(--fsfm-accent);
+}
+
+.fsfm-tool[data-action='delete']:hover:not(:disabled) .fsfm-tool-icon {
+  color: var(--fsfm-danger);
+}
+
+.fsfm-tool-icon-only .fsfm-tool-label {
+  display: none;
+}
+
+.fsfm-tool-separator {
+  width: 1px;
+  align-self: stretch;
+  margin: 4px 6px;
+  background: var(--fsfm-border);
+}
+
+/* Set when no primary action is on the toolbar, which is the default. Nothing
+   here needs it — the auto margin below already pins the remaining controls
+   right — but it gives a host a hook to restyle or hide the bar entirely. */
+.fsfm-toolbar-bare {
+  /* intentionally empty */
+}
+
+.fsfm-toolbar-end {
+  display: flex;
+  align-items: center;
+  /* No gap: these are icon buttons that already carry 10px of padding each, so
+     a gap on top of that reads as a break between them rather than as one
+     cluster. */
+  gap: 0;
+  /* auto margin pins the group right on its own line too, which is what keeps
+     a wrapped toolbar from looking ragged. */
+  margin-left: auto;
+}
+
+.fsfm-search-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.fsfm-search {
+  /* Shrinks before the toolbar labels have to go. */
+  flex: 0 1 190px;
+  min-width: 110px;
+  padding: 6px 10px;
+  font: inherit;
+  color: var(--fsfm-text);
+  background: var(--fsfm-bg);
+  border: 1px solid var(--fsfm-border);
+  border-radius: var(--fsfm-radius);
+}
+
+.fsfm-search::placeholder {
+  color: var(--fsfm-text-muted);
+}
+
+/* Narrow hosts: labels drop away so the toolbar stays a single row of icons. */
+@container fsfm (max-width: 1080px) {
+  .fsfm-tool-label {
+    display: none;
+  }
+  .fsfm-tool {
+    padding: 6px 8px;
+  }
+}
+
+/* Group separators are the first thing to go: they carry no information. */
+@container fsfm (max-width: 700px) {
+  .fsfm-tool-separator {
+    display: none;
+  }
+  /* Flex breaks lines using each item's basis *before* it shrinks anything, so
+     a narrower basis here is what actually keeps the toolbar on one row. */
+  .fsfm-search {
+    flex-basis: 120px;
+  }
+}
+
+/* Below this the search box would crowd out the buttons entirely. */
+@container fsfm (max-width: 420px) {
+  .fsfm-search-wrap {
+    display: none;
+  }
+}
+
+/* --------------------------------------------------------------- structure */
+
+.fsfm-body {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.fsfm-sidebar {
+  flex: 0 0 var(--fsfm-sidebar-width);
+  min-width: 160px;
+  max-width: 50%;
+  overflow: auto;
+  padding: 8px 4px 8px 0;
+  background: var(--fsfm-bg-subtle);
+  border-right: 1px solid var(--fsfm-border);
+  resize: horizontal;
+}
+
+.fsfm-main {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+@container fsfm (max-width: 620px) {
+  .fsfm-sidebar {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------------------------- tree */
+
+.fsfm-tree {
+  min-width: max-content;
+}
+
+.fsfm-tree-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: var(--fsfm-row-height);
+  padding-right: 10px;
+  border-radius: 0 var(--fsfm-radius) var(--fsfm-radius) 0;
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.fsfm-tree-row:hover {
+  background: var(--fsfm-bg-sunken);
+}
+
+.fsfm-tree-row.is-active {
+  color: var(--fsfm-accent);
+  background: var(--fsfm-accent-soft);
+  font-weight: 600;
+}
+
+.fsfm-tree-row.is-drop-target {
+  background: var(--fsfm-accent-soft);
+  box-shadow: inset 0 0 0 2px var(--fsfm-accent);
+}
+
+.fsfm-tree-twisty {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  color: var(--fsfm-text-muted);
+  background: none;
+  border: 0;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.fsfm-tree-twisty:disabled {
+  cursor: default;
+  visibility: hidden;
+}
+
+.fsfm-tree-twisty.is-busy {
+  animation: fsfm-pulse 0.9s ease-in-out infinite;
+}
+
+.fsfm-tree-icon,
+.fsfm-picker-icon {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.fsfm-tree-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fsfm-tree-error,
+.fsfm-picker-error {
+  padding: 6px 10px;
+  color: var(--fsfm-danger);
+  font-size: 13px;
+}
+
+@keyframes fsfm-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ------------------------------------------------------------ breadcrumbs */
+
+.fsfm-crumbs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  padding: 6px 10px;
+  background: var(--fsfm-bg);
+  border-bottom: 1px solid var(--fsfm-border);
+}
+
+.fsfm-crumb-up {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin-right: 6px;
+  color: var(--fsfm-text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--fsfm-radius);
+  cursor: pointer;
+}
+
+.fsfm-crumb-up:hover:not(:disabled) {
+  color: var(--fsfm-accent);
+  background: var(--fsfm-bg-sunken);
+  border-color: var(--fsfm-border);
+}
+
+.fsfm-crumb-up:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+/* Pinned to the end of the bar by the auto margin, so it stays put while the
+   crumbs grow and shrink with the path. */
+.fsfm-crumb-copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin-left: auto;
+  color: var(--fsfm-text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--fsfm-radius);
+  cursor: pointer;
+}
+
+.fsfm-crumb-copy:hover {
+  color: var(--fsfm-accent);
+  background: var(--fsfm-bg-sunken);
+  border-color: var(--fsfm-border);
+}
+
+.fsfm-crumb {
+  padding: 4px 8px;
+  font: inherit;
+  color: var(--fsfm-accent);
+  background: transparent;
+  border: 0;
+  border-radius: var(--fsfm-radius);
+  cursor: pointer;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fsfm-crumb:hover {
+  background: var(--fsfm-bg-sunken);
+  text-decoration: underline;
+}
+
+.fsfm-crumb.is-current {
+  color: var(--fsfm-text);
+  font-weight: 600;
+  cursor: default;
+}
+
+.fsfm-crumb.is-current:hover {
+  background: transparent;
+  text-decoration: none;
+}
+
+.fsfm-crumb.is-drop-target {
+  background: var(--fsfm-accent-soft);
+  box-shadow: inset 0 0 0 2px var(--fsfm-accent);
+}
+
+.fsfm-crumb-sep {
+  display: inline-flex;
+  align-items: center;
+  color: var(--fsfm-text-muted);
+  opacity: 0.6;
+}
+
+/* -------------------------------------------------------------- file list */
+
+.fsfm-list {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  outline-offset: -2px;
+}
+
+.fsfm-list.is-drop-active::after {
+  /* Set from JS as a custom property so it can be translated; the literal is
+     the fallback for a page that renders the CSS without the widget. */
+  content: var(--fsfm-drop-label, 'Drop files here to upload');
+  position: absolute;
+  inset: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--fsfm-accent);
+  font-weight: 600;
+  background: color-mix(in srgb, var(--fsfm-accent-soft) 82%, transparent);
+  border: 2px dashed var(--fsfm-accent);
+  border-radius: var(--fsfm-radius-lg);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Grid ------------------------------------------------------------------- */
+
+.fsfm-list-grid .fsfm-list-body {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--fsfm-tile-width), 1fr));
+  gap: 4px;
+  padding: 12px;
+  align-content: start;
+}
+
+.fsfm-list-grid .fsfm-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 6px 10px;
+  border: 1px solid transparent;
+  border-radius: var(--fsfm-radius);
+  cursor: default;
+  user-select: none;
+  text-align: center;
+}
+
+.fsfm-list-grid .fsfm-entry-name {
+  width: 100%;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  word-break: break-word;
+  line-height: 1.3;
+}
+
+.fsfm-list-grid .fsfm-empty {
+  grid-column: 1 / -1;
+}
+
+/* Details ---------------------------------------------------------------- */
+
+.fsfm-list-details .fsfm-list-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 110px 160px;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--fsfm-bg-subtle);
+  border-bottom: 1px solid var(--fsfm-border);
+}
+
+.fsfm-col {
+  padding: 8px 12px;
+  font: inherit;
+  font-weight: 600;
+  font-size: 13px;
+  color: var(--fsfm-text-muted);
+  text-align: left;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+}
+
+.fsfm-col:hover {
+  color: var(--fsfm-text);
+  background: var(--fsfm-bg-sunken);
+}
+
+.fsfm-col.is-sorted {
+  color: var(--fsfm-accent);
+}
+
+.fsfm-list-details .fsfm-entry {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 110px 160px;
+  align-items: center;
+  min-height: var(--fsfm-row-height);
+  padding: 0;
+  border: 1px solid transparent;
+  cursor: default;
+  user-select: none;
+}
+
+.fsfm-list-details .fsfm-entry-name {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding: 6px 12px 6px 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fsfm-list-details .fsfm-entry-icon {
+  grid-row: 1;
+  padding-left: 12px;
+}
+
+.fsfm-list-details .fsfm-entry {
+  grid-template-columns: 32px minmax(0, 1fr) 110px 160px;
+}
+
+.fsfm-list-details .fsfm-list-header {
+  grid-template-columns: 32px minmax(0, 1fr) 110px 160px;
+}
+
+.fsfm-list-details .fsfm-list-header .fsfm-col-name {
+  grid-column: 2;
+}
+
+.fsfm-list-details .fsfm-entry-size,
+.fsfm-list-details .fsfm-entry-date {
+  padding: 6px 12px;
+  color: var(--fsfm-text-muted);
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fsfm-list-details .fsfm-entry:nth-child(even of .fsfm-entry) {
+  background: color-mix(in srgb, var(--fsfm-bg-subtle) 55%, transparent);
+}
+
+/* Shared entry states ---------------------------------------------------- */
+
+.fsfm-entry:hover {
+  background: var(--fsfm-bg-sunken);
+}
+
+.fsfm-entry.is-selected {
+  color: var(--fsfm-accent);
+  background: var(--fsfm-accent-soft);
+  border-color: color-mix(in srgb, var(--fsfm-accent) 35%, transparent);
+}
+
+.fsfm-entry.is-drop-target {
+  background: var(--fsfm-accent-soft);
+  box-shadow: inset 0 0 0 2px var(--fsfm-accent);
+}
+
+.fsfm-entry-up {
+  cursor: pointer;
+  opacity: 0.85;
+}
+
+.fsfm-entry-up:hover {
+  opacity: 1;
+}
+
+.fsfm-entry-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  pointer-events: none;
+}
+
+.fsfm-icon-drawn {
+  display: inline-flex;
+}
+
+/* Thumbnails are photographs of arbitrary aspect ratio dropped into a square
+   slot: contain keeps them whole, the frame keeps the grid even. */
+.fsfm-thumb {
+  object-fit: contain;
+  border-radius: 3px;
+  background: var(--fsfm-bg-subtle);
+  box-shadow: 0 0 0 1px var(--fsfm-border);
+}
+
+.fsfm-empty {
+  padding: 40px 12px;
+  color: var(--fsfm-text-muted);
+  text-align: center;
+}
+
+/* Shown when the server capped the listing, so a partial folder never looks
+   like a complete one. */
+.fsfm-notice {
+  padding: 10px 12px;
+  margin: 8px;
+  border: 1px solid var(--fsfm-border);
+  border-radius: var(--fsfm-radius);
+  background: var(--fsfm-bg-subtle);
+  color: var(--fsfm-text-muted);
+  font-size: 12px;
+  text-align: center;
+}
+
+.fsfm-list-grid .fsfm-notice {
+  grid-column: 1 / -1;
+}
+
+.fsfm-list.is-dragging .fsfm-entry.is-selected {
+  opacity: 0.5;
+}
+
+/* ------------------------------------------------------------- status bar */
+
+.fsfm-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex: 0 0 auto;
+  padding: 6px 12px;
+  color: var(--fsfm-text-muted);
+  font-size: 12.5px;
+  background: var(--fsfm-bg-subtle);
+  border-top: 1px solid var(--fsfm-border);
+}
+
+.fsfm-status-right {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  opacity: 0.85;
+}
+
+/* ---------------------------------------------------------------- overlay */
+
+.fsfm-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--fsfm-bg) 55%, transparent);
+  z-index: 5;
+  /* The overlay reports progress; it must not swallow clicks meant for the UI
+     underneath once an operation is slow but still interactive. */
+  pointer-events: none;
+}
+
+.fsfm-overlay[hidden] {
+  display: none;
+}
+
+.fsfm-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid color-mix(in srgb, var(--fsfm-accent) 25%, transparent);
+  border-top-color: var(--fsfm-accent);
+  border-radius: 50%;
+  animation: fsfm-spin 0.7s linear infinite;
+}
+
+@keyframes fsfm-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ---------------------------------------------------------------- dialogs */
+
+.fsfm-backdrop {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(16, 24, 40, 0.45);
+  z-index: 20;
+}
+
+.fsfm-dialog {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 420px;
+  max-height: 100%;
+  background: var(--fsfm-bg);
+  border: 1px solid var(--fsfm-border);
+  border-radius: var(--fsfm-radius-lg);
+  box-shadow: var(--fsfm-shadow-lg);
+}
+
+.fsfm-dialog-wide {
+  max-width: 560px;
+}
+
+.fsfm-dialog-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px 10px;
+}
+
+.fsfm-dialog-title {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fsfm-dialog-close {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  color: var(--fsfm-text-muted);
+  background: transparent;
+  border: 0;
+  border-radius: var(--fsfm-radius);
+  cursor: pointer;
+}
+
+.fsfm-dialog-close:hover {
+  background: var(--fsfm-bg-sunken);
+}
+
+.fsfm-dialog-body {
+  padding: 0 16px 4px;
+  overflow: auto;
+}
+
+.fsfm-dialog-text {
+  margin: 0 0 8px;
+}
+
+.fsfm-dialog-hint {
+  margin: 8px 0 0;
+  color: var(--fsfm-text-muted);
+  font-size: 12.5px;
+}
+
+.fsfm-dialog-list {
+  max-height: 160px;
+  margin: 8px 0 0;
+  padding-left: 20px;
+  overflow: auto;
+  color: var(--fsfm-text-muted);
+  font-size: 13px;
+}
+
+.fsfm-dialog-error {
+  display: none;
+  margin: 8px 16px 0;
+  padding: 7px 10px;
+  color: var(--fsfm-danger);
+  font-size: 13px;
+  background: color-mix(in srgb, var(--fsfm-danger) 10%, transparent);
+  border-radius: var(--fsfm-radius);
+}
+
+.fsfm-dialog-error.is-visible {
+  display: block;
+}
+
+.fsfm-dialog-foot {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 14px 16px;
+}
+
+.fsfm-field {
+  display: block;
+}
+
+.fsfm-field-label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--fsfm-text-muted);
+  font-size: 12.5px;
+}
+
+.fsfm-input {
+  width: 100%;
+  padding: 8px 10px;
+  font: inherit;
+  color: var(--fsfm-text);
+  background: var(--fsfm-bg);
+  border: 1px solid var(--fsfm-border-strong);
+  border-radius: var(--fsfm-radius);
+}
+
+.fsfm-btn {
+  padding: 7px 14px;
+  font: inherit;
+  color: var(--fsfm-text);
+  background: var(--fsfm-bg);
+  border: 1px solid var(--fsfm-border-strong);
+  border-radius: var(--fsfm-radius);
+  cursor: pointer;
+}
+
+.fsfm-btn:hover:not(:disabled) {
+  background: var(--fsfm-bg-sunken);
+}
+
+.fsfm-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.fsfm-btn-primary {
+  color: var(--fsfm-accent-contrast);
+  background: var(--fsfm-accent);
+  border-color: var(--fsfm-accent);
+}
+
+.fsfm-btn-primary:hover:not(:disabled) {
+  background: var(--fsfm-accent-hover);
+  border-color: var(--fsfm-accent-hover);
+}
+
+.fsfm-btn-danger {
+  color: var(--fsfm-text-inverse);
+  background: var(--fsfm-danger);
+  border-color: var(--fsfm-danger);
+}
+
+.fsfm-btn-danger:hover:not(:disabled) {
+  background: var(--fsfm-danger-hover);
+  border-color: var(--fsfm-danger-hover);
+}
+
+/* Folder picker ---------------------------------------------------------- */
+
+.fsfm-picker {
+  height: 260px;
+  overflow: auto;
+  background: var(--fsfm-bg-subtle);
+  border: 1px solid var(--fsfm-border);
+  border-radius: var(--fsfm-radius);
+}
+
+.fsfm-picker-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 30px;
+  padding-right: 10px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.fsfm-picker-row:hover {
+  background: var(--fsfm-bg-sunken);
+}
+
+.fsfm-picker-row.is-selected {
+  color: var(--fsfm-accent);
+  background: var(--fsfm-accent-soft);
+  font-weight: 600;
+}
+
+.fsfm-picker-row.is-blocked {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.fsfm-picker-twisty {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  color: var(--fsfm-text-muted);
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.fsfm-picker-twisty:disabled {
+  visibility: hidden;
+}
+
+.fsfm-picker-twisty.is-busy {
+  animation: fsfm-pulse 0.9s ease-in-out infinite;
+}
+
+.fsfm-picker-selection {
+  margin: 10px 0 0;
+  color: var(--fsfm-text-muted);
+  font-size: 12.5px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Progress --------------------------------------------------------------- */
+
+.fsfm-progress {
+  height: 8px;
+  overflow: hidden;
+  background: var(--fsfm-bg-sunken);
+  border-radius: 999px;
+}
+
+.fsfm-progress-bar {
+  width: 0;
+  height: 100%;
+  background: var(--fsfm-accent);
+  border-radius: inherit;
+  transition: width 0.15s ease;
+}
+
+/* ----------------------------------------------------------- context menu */
+
+.fsfm-menu {
+  position: absolute;
+  min-width: 210px;
+  padding: 4px;
+  background: var(--fsfm-bg);
+  border: 1px solid var(--fsfm-border);
+  border-radius: var(--fsfm-radius);
+  box-shadow: var(--fsfm-shadow);
+  z-index: 30;
+  /* The height cap is set from JS to the widget's own height; this is what
+     makes a menu too long for it scroll instead of being clipped away. */
+  overflow-y: auto;
+}
+
+.fsfm-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 10px;
+  font: inherit;
+  color: var(--fsfm-text);
+  text-align: left;
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.fsfm-menu-item:hover:not(:disabled),
+.fsfm-menu-item:focus-visible {
+  background: var(--fsfm-bg-sunken);
+}
+
+.fsfm-menu-item:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.fsfm-menu-item.is-danger {
+  color: var(--fsfm-danger);
+}
+
+.fsfm-menu-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  color: var(--fsfm-text-muted);
+}
+
+.fsfm-menu-item.is-danger .fsfm-menu-icon {
+  color: var(--fsfm-danger);
+}
+
+.fsfm-menu-label {
+  flex: 1 1 auto;
+}
+
+.fsfm-menu-shortcut {
+  color: var(--fsfm-text-muted);
+  font-size: 12px;
+}
+
+.fsfm-menu-separator {
+  height: 1px;
+  margin: 4px 6px;
+  background: var(--fsfm-border);
+}
+
+/* ----------------------------------------------------------------- toasts */
+
+.fsfm-toasts {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: min(360px, calc(100% - 24px));
+  z-index: 40;
+  pointer-events: none;
+}
+
+/* Clear the status bar when there is one, so toasts never cover the path. */
+.fsfm:has(.fsfm-status) .fsfm-toasts {
+  bottom: 44px;
+}
+
+.fsfm-toast {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 9px 11px;
+  color: var(--fsfm-text);
+  background: var(--fsfm-bg);
+  border: 1px solid var(--fsfm-border);
+  border-left: 3px solid var(--fsfm-text-muted);
+  border-radius: var(--fsfm-radius);
+  box-shadow: var(--fsfm-shadow);
+  pointer-events: auto;
+  animation: fsfm-toast-in 0.16s ease-out;
+}
+
+.fsfm-toast.is-leaving {
+  opacity: 0;
+  transition: opacity 0.16s ease;
+}
+
+.fsfm-toast-success {
+  border-left-color: var(--fsfm-success);
+}
+
+.fsfm-toast-error {
+  border-left-color: var(--fsfm-danger);
+}
+
+.fsfm-toast-text {
+  flex: 1 1 auto;
+  font-size: 13px;
+  word-break: break-word;
+}
+
+.fsfm-toast-close {
+  flex: 0 0 auto;
+  padding: 2px;
+  color: var(--fsfm-text-muted);
+  background: none;
+  border: 0;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.fsfm-toast-close:hover {
+  color: var(--fsfm-text);
+  background: var(--fsfm-bg-sunken);
+}
+
+@keyframes fsfm-toast-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fsfm *,
+  .fsfm *::before,
+  .fsfm *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------------------------------------------------------------- preview */
+
+/* The viewer fills the widget rather than sitting in a centred card: an image
+   is the content here, and every pixel spent on chrome is one it does not get. */
+.fsfm-preview-backdrop {
+  padding: 12px;
+  background: rgba(16, 24, 40, 0.72);
+}
+
+.fsfm-preview {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  background: var(--fsfm-bg);
+  border: 1px solid var(--fsfm-border);
+  border-radius: var(--fsfm-radius-lg);
+  box-shadow: var(--fsfm-shadow-lg);
+  overflow: hidden;
+}
+
+.fsfm-preview-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--fsfm-border);
+  background: var(--fsfm-bg-subtle);
+}
+
+.fsfm-preview-title {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fsfm-preview-counter {
+  flex: 0 0 auto;
+  color: var(--fsfm-text-muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.fsfm-preview-close {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  color: var(--fsfm-text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--fsfm-radius);
+  cursor: pointer;
+}
+
+.fsfm-preview-close:hover {
+  color: var(--fsfm-text);
+  background: var(--fsfm-bg-sunken);
+}
+
+.fsfm-preview-body {
+  position: relative;
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  /* A checkerboard, so a transparent PNG reads as transparent instead of as
+     a white image on a white background. */
+  background:
+    conic-gradient(from 90deg at 1px 1px, var(--fsfm-bg-sunken) 25%, transparent 0) 0 0 / 16px 16px,
+    var(--fsfm-bg);
+}
+
+.fsfm-preview-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: auto;
+}
+
+.fsfm-preview-image {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+/* Applied only to whole-number upscales of small images: a favicon inspected
+   at 8× should show its pixels, not an interpolated blur of them. */
+.fsfm-preview-image.is-pixelated {
+  image-rendering: pixelated;
+}
+
+.fsfm-preview-frame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: var(--fsfm-bg);
+}
+
+.fsfm-preview-error {
+  padding: 40px 16px;
+  color: var(--fsfm-text-muted);
+  text-align: center;
+}
+
+.fsfm-preview-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  color: var(--fsfm-text);
+  background: var(--fsfm-bg);
+  border: 1px solid var(--fsfm-border);
+  border-radius: 50%;
+  box-shadow: var(--fsfm-shadow);
+  cursor: pointer;
+}
+
+.fsfm-preview-nav:hover:not(:disabled) {
+  background: var(--fsfm-bg-subtle);
+}
+
+.fsfm-preview-nav:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.fsfm-preview-prev {
+  left: 12px;
+  /* One caret glyph, turned around, rather than a second icon in the bundle. */
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.fsfm-preview-next {
+  right: 12px;
+}
+
+.fsfm-preview-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--fsfm-border);
+  background: var(--fsfm-bg-subtle);
+}
+
+.fsfm-preview-meta {
+  color: var(--fsfm-text-muted);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@container fsfm (max-width: 520px) {
+  .fsfm-preview-nav {
+    width: 32px;
+    height: 32px;
+  }
+
+  .fsfm-preview-counter {
+    display: none;
+  }
+}
+
+/* ------------------------------------------------- properties and access */
+
+.fsfm-props {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 14px;
+}
+
+.fsfm-props-row {
+  display: grid;
+  /* A fixed label column keeps every value on the same left edge, which is
+     what makes a table of properties scannable rather than ragged. */
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 12px;
+  align-items: baseline;
+  padding: 4px 0;
+}
+
+.fsfm-props-row + .fsfm-props-row {
+  border-top: 1px solid var(--fsfm-border);
+}
+
+.fsfm-props-label {
+  color: var(--fsfm-text-muted);
+  font-size: 12px;
+}
+
+.fsfm-props-value {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.fsfm-props-mode {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.fsfm-link-button {
+  margin-left: 8px;
+  padding: 0;
+  color: var(--fsfm-accent);
+  background: none;
+  border: 0;
+  font: inherit;
+  font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.fsfm-link-button:disabled {
+  color: var(--fsfm-text-muted);
+  cursor: default;
+}
+
+/* The rwx grid: three classes down, three bits across, plus headers. */
+.fsfm-mode-grid {
+  display: grid;
+  grid-template-columns: auto repeat(3, minmax(0, 1fr));
+  gap: 6px 10px;
+  align-items: center;
+  padding: 10px 12px;
+  background: var(--fsfm-bg-subtle);
+  border: 1px solid var(--fsfm-border);
+  border-radius: var(--fsfm-radius);
+}
+
+.fsfm-mode-head,
+.fsfm-mode-class {
+  color: var(--fsfm-text-muted);
+  font-size: 12px;
+}
+
+.fsfm-mode-head {
+  text-align: center;
+}
+
+.fsfm-mode-cell {
+  display: flex;
+  justify-content: center;
+}
+
+.fsfm-mode-cell input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--fsfm-accent);
+  cursor: pointer;
+}
+
+.fsfm-mode-cell input:disabled {
+  cursor: default;
+}
+
+.fsfm-mode-summary {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.fsfm-mode-octal {
+  width: 90px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: 0.08em;
+}
+
+.fsfm-mode-preview {
+  padding-bottom: 8px;
+  color: var(--fsfm-text-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  letter-spacing: 0.05em;
+}
+
+.fsfm-mode-presets {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.fsfm-chip {
+  padding: 3px 10px;
+  color: var(--fsfm-text);
+  background: var(--fsfm-bg);
+  border: 1px solid var(--fsfm-border);
+  border-radius: 999px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.fsfm-chip:hover {
+  background: var(--fsfm-accent-soft);
+  border-color: var(--fsfm-accent);
+}
+
+.fsfm-check {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  cursor: pointer;
+}
+
+.fsfm-check input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--fsfm-accent);
+}
+
+/* An executable file is worth spotting in a listing without opening anything. */
+.fsfm-entry.is-executable .fsfm-entry-name::after {
+  content: '*';
+  margin-left: 2px;
+  color: var(--fsfm-success);
+  font-weight: 700;
+}
+
+/* ------------------------------------------------------------- archives */
+
+.fsfm-format-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 4px;
+  margin-bottom: 14px;
+}
+
+.fsfm-format {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid transparent;
+  border-radius: var(--fsfm-radius);
+  cursor: pointer;
+}
+
+.fsfm-format:hover {
+  background: var(--fsfm-bg-subtle);
+  border-color: var(--fsfm-border);
+}
+
+.fsfm-format input {
+  accent-color: var(--fsfm-accent);
+}
+
+.fsfm-format-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fsfm-format-ext {
+  color: var(--fsfm-text-muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+}
+
+/* The contents listing scrolls on its own so a thousand-entry archive does not
+   push the dialog's buttons off the screen. */
+.fsfm-archive-list {
+  max-height: 320px;
+  overflow: auto;
+  border: 1px solid var(--fsfm-border);
+  border-radius: var(--fsfm-radius);
+}
+
+.fsfm-archive-row {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr) 80px;
+  gap: 8px;
+  align-items: baseline;
+  padding: 4px 8px;
+  font-size: 13px;
+}
+
+.fsfm-archive-row:nth-child(odd) {
+  background: var(--fsfm-bg-subtle);
+}
+
+.fsfm-archive-kind {
+  color: var(--fsfm-text-muted);
+  font-size: 11px;
+}
+
+.fsfm-archive-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  direction: rtl;
+  text-align: left;
+}
+
+.fsfm-archive-size {
+  color: var(--fsfm-text-muted);
+  font-size: 12px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --------------------------------------------------------- sheet editor */
+
+.fsfm-sheet-backdrop {
+  padding: 12px;
+  background: rgba(16, 24, 40, 0.72);
+}
+
+.fsfm-sheet {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  background: var(--fsfm-bg);
+  border: 1px solid var(--fsfm-border);
+  border-radius: var(--fsfm-radius-lg);
+  box-shadow: var(--fsfm-shadow-lg);
+  overflow: hidden;
+}
+
+.fsfm-sheet-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--fsfm-border);
+  background: var(--fsfm-bg-subtle);
+}
+
+.fsfm-sheet-title {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fsfm-sheet-status {
+  flex: 0 1 auto;
+  min-width: 0;
+  color: var(--fsfm-text-muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fsfm-sheet-notice {
+  margin: 0;
+  padding: 6px 12px;
+  color: var(--fsfm-text-muted);
+  background: var(--fsfm-bg-subtle);
+  border-bottom: 1px solid var(--fsfm-border);
+  font-size: 12px;
+}
+
+.fsfm-sheet-tabs {
+  display: flex;
+  gap: 2px;
+  padding: 6px 12px 0;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--fsfm-border);
+}
+
+.fsfm-sheet-tab {
+  padding: 5px 12px;
+  color: var(--fsfm-text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-bottom: 0;
+  border-radius: var(--fsfm-radius) var(--fsfm-radius) 0 0;
+  font: inherit;
+  font-size: 13px;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.fsfm-sheet-tab.is-active {
+  color: var(--fsfm-text);
+  background: var(--fsfm-bg);
+  border-color: var(--fsfm-border);
+  font-weight: 600;
+}
+
+/* The grid is one scroller; rows are grid rows so every column lines up
+   without a table's layout quirks. */
+.fsfm-sheet-grid {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  outline: none;
+  background: var(--fsfm-bg);
+}
+
+.fsfm-sheet-row {
+  display: grid;
+  grid-template-columns: 52px repeat(var(--fsfm-sheet-columns, 10), minmax(96px, 1fr));
+}
+
+.fsfm-sheet-header {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+.fsfm-sheet-corner,
+.fsfm-sheet-colhead,
+.fsfm-sheet-rowhead {
+  padding: 4px 6px;
+  color: var(--fsfm-text-muted);
+  background: var(--fsfm-bg-subtle);
+  border-right: 1px solid var(--fsfm-border);
+  border-bottom: 1px solid var(--fsfm-border);
+  font-size: 11px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.fsfm-sheet-corner,
+.fsfm-sheet-rowhead {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+
+.fsfm-sheet-corner {
+  z-index: 3;
+}
+
+.fsfm-sheet-cell {
+  position: relative;
+  padding: 4px 6px;
+  border-right: 1px solid var(--fsfm-border);
+  border-bottom: 1px solid var(--fsfm-border);
+  font-size: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: cell;
+}
+
+/* Numbers right-align, the way every spreadsheet shows them — it is what
+   makes a column of figures readable. */
+.fsfm-sheet-cell.is-number {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.fsfm-sheet-cell.is-selected {
+  outline: 2px solid var(--fsfm-accent);
+  outline-offset: -2px;
+  background: var(--fsfm-accent-soft);
+}
+
+.fsfm-sheet-cell.is-editing {
+  padding: 0;
+  overflow: visible;
+}
+
+.fsfm-sheet-input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  padding: 4px 6px;
+  border: 2px solid var(--fsfm-accent);
+  border-radius: 0;
+  font: inherit;
+  font-size: 13px;
+  background: var(--fsfm-bg);
+  color: var(--fsfm-text);
+  outline: none;
+  box-sizing: border-box;
+}
+
+.fsfm-sheet-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--fsfm-border);
+  background: var(--fsfm-bg-subtle);
+}
+
+.fsfm-sheet-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ---------------------------------------------------------- code editor */
+
+.fsfm {
+  --fsfm-code-font: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
+  --fsfm-code-size: 13px;
+  --fsfm-code-line: 20px;
+
+  --fsfm-tok-comment: #6a737d;
+  --fsfm-tok-string: #0a7d32;
+  --fsfm-tok-number: #b3261e;
+  --fsfm-tok-keyword: #a626a4;
+  --fsfm-tok-type: #0b6cbf;
+  --fsfm-tok-builtin: #986801;
+  --fsfm-tok-tag: #22863a;
+  --fsfm-tok-attr: #6f42c1;
+  --fsfm-tok-property: #0b6cbf;
+  --fsfm-tok-variable: #b3261e;
+  --fsfm-tok-operator: #4b5563;
+  --fsfm-tok-punctuation: #6b7280;
+  --fsfm-tok-heading: #0b6cbf;
+  --fsfm-tok-link: #0a7d32;
+  --fsfm-tok-meta: #986801;
+}
+
+.fsfm-code-backdrop {
+  padding: 12px;
+  background: rgba(16, 24, 40, 0.72);
+}
+
+.fsfm-code {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  background: var(--fsfm-bg);
+  border: 1px solid var(--fsfm-border);
+  border-radius: var(--fsfm-radius-lg);
+  box-shadow: var(--fsfm-shadow-lg);
+  overflow: hidden;
+}
+
+.fsfm-code-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--fsfm-border);
+  background: var(--fsfm-bg-subtle);
+}
+
+.fsfm-code-title {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fsfm-code-status {
+  flex: 0 1 auto;
+  min-width: 0;
+  color: var(--fsfm-text-muted);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fsfm-code-notice {
+  margin: 0;
+  padding: 5px 12px;
+  color: var(--fsfm-text-muted);
+  background: var(--fsfm-bg-subtle);
+  border-bottom: 1px solid var(--fsfm-border);
+  font-size: 12px;
+}
+
+.fsfm-code-body {
+  flex: 1 1 auto;
+  display: flex;
+  min-height: 0;
+  background: var(--fsfm-bg);
+}
+
+/* The gutter scrolls vertically with the text but never horizontally, so line
+   numbers stay put while long lines slide underneath. */
+.fsfm-code-gutter {
+  flex: 0 0 auto;
+  padding: 10px 8px 10px 12px;
+  overflow: hidden;
+  color: var(--fsfm-text-muted);
+  background: var(--fsfm-bg-subtle);
+  border-right: 1px solid var(--fsfm-border);
+  font-family: var(--fsfm-code-font);
+  font-size: var(--fsfm-code-size);
+  line-height: var(--fsfm-code-line);
+  text-align: right;
+  white-space: pre;
+  user-select: none;
+  tab-size: 2;
+}
+
+.fsfm-code-scroll {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* The two layers must agree on every metric that affects where a glyph lands.
+   Any difference here shows up as the caret drifting away from the coloured
+   text further down the file, which is the classic failure of this technique. */
+.fsfm-code-highlight,
+.fsfm-code-input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  padding: 10px 12px;
+  border: 0;
+  font-family: var(--fsfm-code-font);
+  font-size: var(--fsfm-code-size);
+  line-height: var(--fsfm-code-line);
+  tab-size: 2;
+  white-space: pre;
+  overflow-wrap: normal;
+  word-break: normal;
+  box-sizing: border-box;
+}
+
+.fsfm-code-highlight {
+  overflow: hidden;
+  color: var(--fsfm-text);
+  background: transparent;
+  pointer-events: none;
+}
+
+.fsfm-code-input {
+  overflow: auto;
+  resize: none;
+  outline: none;
+  background: transparent;
+  /* Transparent text over the coloured copy; the caret has to stay visible. */
+  color: transparent;
+  caret-color: var(--fsfm-text);
+}
+
+.fsfm-code-input::selection {
+  background: color-mix(in srgb, var(--fsfm-accent) 35%, transparent);
+}
+
+.fsfm-code-input:read-only {
+  caret-color: transparent;
+}
+
+.fsfm-code-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--fsfm-border);
+  background: var(--fsfm-bg-subtle);
+}
+
+.fsfm-code-position {
+  color: var(--fsfm-text-muted);
+  font-family: var(--fsfm-code-font);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.fsfm-tok-comment { color: var(--fsfm-tok-comment); font-style: italic; }
+.fsfm-tok-string { color: var(--fsfm-tok-string); }
+.fsfm-tok-number { color: var(--fsfm-tok-number); }
+.fsfm-tok-keyword { color: var(--fsfm-tok-keyword); }
+.fsfm-tok-type { color: var(--fsfm-tok-type); }
+.fsfm-tok-builtin { color: var(--fsfm-tok-builtin); }
+.fsfm-tok-tag { color: var(--fsfm-tok-tag); }
+.fsfm-tok-attr { color: var(--fsfm-tok-attr); }
+.fsfm-tok-property { color: var(--fsfm-tok-property); }
+.fsfm-tok-variable { color: var(--fsfm-tok-variable); }
+.fsfm-tok-operator { color: var(--fsfm-tok-operator); }
+.fsfm-tok-punctuation { color: var(--fsfm-tok-punctuation); }
+.fsfm-tok-heading { color: var(--fsfm-tok-heading); font-weight: 600; }
+.fsfm-tok-link { color: var(--fsfm-tok-link); text-decoration: underline; }
+.fsfm-tok-meta { color: var(--fsfm-tok-meta); }
+
+/* ------------------------------------------------------ document editor */
+
+.fsfm-doc-backdrop {
+  padding: 12px;
+  background: rgba(16, 24, 40, 0.72);
+}
+
+.fsfm-doc {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  background: var(--fsfm-bg);
+  border: 1px solid var(--fsfm-border);
+  border-radius: var(--fsfm-radius-lg);
+  box-shadow: var(--fsfm-shadow-lg);
+  overflow: hidden;
+}
+
+.fsfm-doc-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--fsfm-border);
+  background: var(--fsfm-bg-subtle);
+}
+
+.fsfm-doc-title {
+  margin: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: 14px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fsfm-doc-status {
+  flex: 0 1 auto;
+  min-width: 0;
+  color: var(--fsfm-text-muted);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fsfm-doc-notice {
+  margin: 0;
+  padding: 6px 12px;
+  color: var(--fsfm-text-muted);
+  background: var(--fsfm-bg-subtle);
+  border-bottom: 1px solid var(--fsfm-border);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.fsfm-doc-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--fsfm-border);
+  flex-wrap: wrap;
+}
+
+.fsfm-doc-sep {
+  width: 1px;
+  height: 20px;
+  background: var(--fsfm-border);
+}
+
+.fsfm-doc-mark {
+  min-width: 32px;
+  font-weight: 700;
+}
+
+.fsfm-doc-mark:nth-of-type(2) { font-style: italic; }
+.fsfm-doc-mark:nth-of-type(3) { text-decoration: underline; }
+
+.fsfm-doc-tab[aria-pressed='true'] {
+  color: var(--fsfm-accent-contrast);
+  background: var(--fsfm-accent);
+  border-color: var(--fsfm-accent);
+}
+
+.fsfm-doc-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 12px;
+}
+
+/* ------------------------------------------------------------ rich text */
+
+.fsfm-doc-row {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr) 32px;
+  gap: 8px;
+  align-items: start;
+  padding: 4px 0;
+}
+
+.fsfm-doc-kind-select {
+  padding: 4px 6px;
+  color: var(--fsfm-text-muted);
+  background: var(--fsfm-bg-subtle);
+  border: 1px solid var(--fsfm-border);
+  border-radius: var(--fsfm-radius);
+  font: inherit;
+  font-size: 12px;
+}
+
+.fsfm-doc-text {
+  padding: 6px 8px;
+  min-height: 1.6em;
+  border: 1px solid transparent;
+  border-radius: var(--fsfm-radius);
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.fsfm-doc-text:hover { border-color: var(--fsfm-border); }
+
+.fsfm-doc-text:focus {
+  outline: none;
+  border-color: var(--fsfm-accent);
+  background: var(--fsfm-bg-subtle);
+}
+
+.fsfm-doc-text.is-heading { font-weight: 700; }
+.fsfm-doc-text.is-h1 { font-size: 21px; }
+.fsfm-doc-text.is-h2 { font-size: 18px; }
+.fsfm-doc-text.is-h3 { font-size: 16px; }
+.fsfm-doc-text.is-h4,
+.fsfm-doc-text.is-h5,
+.fsfm-doc-text.is-h6 { font-size: 14px; }
+
+.fsfm-doc-text.is-listItem {
+  padding-left: 22px;
+  position: relative;
+}
+
+.fsfm-doc-text.is-listItem::before {
+  content: '•';
+  position: absolute;
+  left: 8px;
+  color: var(--fsfm-text-muted);
+}
+
+.fsfm-doc-drop {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: var(--fsfm-text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--fsfm-radius);
+  cursor: pointer;
+}
+
+.fsfm-doc-drop:hover:not(:disabled) {
+  color: var(--fsfm-danger);
+  border-color: var(--fsfm-border);
+}
+
+.fsfm-doc-drop:disabled { opacity: 0.4; cursor: default; }
+
+.fsfm-doc-row.is-locked { grid-template-columns: 132px minmax(0, 1fr); }
+
+.fsfm-doc-kind {
+  padding: 6px 0;
+  color: var(--fsfm-text-muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.fsfm-doc-opaque {
+  padding: 8px;
+  color: var(--fsfm-text-muted);
+  background: var(--fsfm-bg-subtle);
+  border: 1px dashed var(--fsfm-border);
+  border-radius: var(--fsfm-radius);
+  font-size: 13px;
+}
+
+/* ------------------------------------------------------------ pdf pages */
+
+.fsfm-doc-pages {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  gap: 12px;
+}
+
+.fsfm-doc-page {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  background: var(--fsfm-bg-subtle);
+  border: 1px solid var(--fsfm-border);
+  border-radius: var(--fsfm-radius);
+}
+
+.fsfm-doc-page-thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background: var(--fsfm-bg);
+  border: 1px solid var(--fsfm-border);
+  border-radius: var(--fsfm-radius);
+}
+
+.fsfm-doc-page-number {
+  color: var(--fsfm-text-muted);
+  font-size: 24px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.fsfm-doc-page-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  color: var(--fsfm-text-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.fsfm-doc-page-rotated,
+.fsfm-doc-page-foreign {
+  padding: 0 5px;
+  color: var(--fsfm-accent-contrast);
+  background: var(--fsfm-accent);
+  border-radius: 999px;
+}
+
+.fsfm-doc-page-text {
+  margin: 0;
+  color: var(--fsfm-text-muted);
+  font-size: 11px;
+  line-height: 1.4;
+  max-height: 3.2em;
+  overflow: hidden;
+}
+
+.fsfm-doc-page-actions {
+  display: flex;
+  gap: 4px;
+  margin-top: auto;
+}
+
+.fsfm-doc-page-actions .fsfm-btn {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 4px 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* The left arrow is the right one turned around: one icon, two directions. */
+.fsfm-doc-flip svg { transform: rotate(180deg); }
+
+.fsfm-doc-body.is-text { padding: 0; }
+
+.fsfm-doc-pagetext {
+  padding: 12px;
+  border-bottom: 1px solid var(--fsfm-border);
+}
+
+.fsfm-doc-pagetext h3 {
+  margin: 0 0 6px;
+  color: var(--fsfm-text-muted);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.fsfm-doc-pagetext pre {
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.fsfm-doc-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 12px;
+  border-top: 1px solid var(--fsfm-border);
+  background: var(--fsfm-bg-subtle);
+}
+
+.fsfm-doc-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* --------------------------------------------------------------- search */
+
+.fsfm-search-wrap {
+  display: flex;
+  align-items: center;
+  /* The field and the magnifier are different things: one filters this folder
+     as you type, the other opens a search over the whole tree. The magnifier
+     belongs with the buttons to its right, so the space goes on its left. */
+  gap: 8px;
+}
+
+.fsfm-search-backdrop {
+  padding: 24px 12px;
+  background: rgba(16, 24, 40, 0.72);
+  align-items: flex-start;
+}
+
+.fsfm-search-panel {
+  display: flex;
+  flex-direction: column;
+  width: min(920px, 100%);
+  max-height: 100%;
+  min-height: 0;
+  margin: 0 auto;
+  background: var(--fsfm-bg);
+  border: 1px solid var(--fsfm-border);
+  border-radius: var(--fsfm-radius-lg);
+  box-shadow: var(--fsfm-shadow-lg);
+  overflow: hidden;
+}
+
+.fsfm-search-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--fsfm-border);
+  background: var(--fsfm-bg-subtle);
+}
+
+.fsfm-search-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.fsfm-search-scope {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--fsfm-text-muted);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fsfm-search-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border-bottom: 1px solid var(--fsfm-border);
+}
+
+.fsfm-search-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.fsfm-search-field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  flex: 1 1 220px;
+  min-width: 0;
+}
+
+/* The query is the point of the form; the rest are qualifiers. */
+.fsfm-search-row:first-child .fsfm-search-field:first-child { flex: 2 1 320px; }
+
+.fsfm-search-label {
+  color: var(--fsfm-text-muted);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.fsfm-search-checks {
+  align-items: center;
+  gap: 16px;
+}
+
+.fsfm-search-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.fsfm-search-check:has(input:disabled) {
+  color: var(--fsfm-text-muted);
+  cursor: default;
+}
+
+.fsfm-search-actions {
+  display: flex;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.fsfm-search-hint {
+  margin: 0;
+  color: var(--fsfm-text-muted);
+  font-size: 12px;
+}
+
+.fsfm-search-hint.is-warning { color: var(--fsfm-warning); }
+
+.fsfm-search-status {
+  margin: 0;
+  padding: 8px 12px;
+  color: var(--fsfm-text-muted);
+  font-size: 12px;
+  border-bottom: 1px solid var(--fsfm-border);
+}
+
+.fsfm-search-status.is-error { color: var(--fsfm-danger); }
+.fsfm-search-status.is-warning { color: var(--fsfm-warning); }
+
+.fsfm-search-results {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+
+.fsfm-search-row-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--fsfm-border);
+  cursor: pointer;
+}
+
+.fsfm-search-row-item:hover { background: var(--fsfm-bg-subtle); }
+
+.fsfm-search-row-item:focus-visible {
+  outline: 2px solid var(--fsfm-accent);
+  outline-offset: -2px;
+}
+
+.fsfm-search-main {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.fsfm-search-icon {
+  display: inline-flex;
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+}
+
+.fsfm-search-icon svg,
+.fsfm-search-icon img { width: 20px; height: 20px; }
+
+.fsfm-search-name {
+  flex: 0 1 auto;
+  min-width: 0;
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Where the hit lives is the whole reason this list exists. Clipped at the
+   end rather than the start: `direction: rtl` would truncate the less useful
+   half but also moves the leading slash to the other end, which turns
+   `/Проєкти/веб` into `Проєкти/веб/`. The full path is in the row's title. */
+.fsfm-search-where {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--fsfm-text-muted);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fsfm-search-meta {
+  flex: 0 0 auto;
+  color: var(--fsfm-text-muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.fsfm-search-line {
+  display: flex;
+  gap: 8px;
+  padding-left: 28px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 11.5px;
+  line-height: 1.5;
+}
+
+.fsfm-search-lineno {
+  flex: 0 0 auto;
+  min-width: 34px;
+  color: var(--fsfm-text-muted);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.fsfm-search-linetext {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: pre;
+}
+
+.fsfm-search-linetext mark {
+  color: var(--fsfm-accent-contrast);
+  background: var(--fsfm-accent);
+  border-radius: 2px;
+}
+
+.fsfm-search-panel.is-busy .fsfm-search-results { opacity: 0.6; }
+
+@media (max-width: 560px) {
+  .fsfm-search-meta,
+  .fsfm-search-where { display: none; }
+}
+
+/* ------------------------------------------------------------- terminal */
+
+.fsfm-term {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 auto;
+  /* Resizable by the grab corner: a terminal is either a glance or the thing
+     you are working in, and the right height differs by the minute. */
+  height: 200px;
+  min-height: 64px;
+  max-height: 70vh;
+  resize: vertical;
+  overflow: hidden;
+  border-top: 1px solid var(--fsfm-border);
+  background: var(--fsfm-term-bg, var(--fsfm-bg-subtle));
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+
+.fsfm-term[hidden] { display: none; }
+
+.fsfm-term-output {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: 8px 10px 0;
+  overflow: auto;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.fsfm-term-output:focus-visible {
+  outline: 2px solid var(--fsfm-accent);
+  outline-offset: -2px;
+}
+
+.fsfm-term-row { color: var(--fsfm-text); }
+.fsfm-term-row.is-muted { color: var(--fsfm-text-muted); }
+.fsfm-term-row.is-error { color: var(--fsfm-danger); }
+.fsfm-term-row.is-success { color: var(--fsfm-success); }
+
+/* The echoed command line, so the eye can find where each output starts. */
+.fsfm-term-row.is-prompt {
+  color: var(--fsfm-accent);
+  font-weight: 600;
+}
+
+.fsfm-term-line {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 4px 10px 8px;
+}
+
+.fsfm-term-prompt {
+  flex: 0 1 auto;
+  min-width: 0;
+  max-width: 45%;
+  color: var(--fsfm-accent);
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  direction: ltr;
+}
+
+.fsfm-term-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  background: transparent;
+  border: 0;
+  outline: none;
+}
+
+.fsfm-term.is-busy .fsfm-term-input { opacity: 0.5; }
+
+.fsfm-term-toggle[aria-pressed='true'] {
+  color: var(--fsfm-accent);
+  background: var(--fsfm-accent-soft);
+}
+
+/* On a narrow container the panel takes less of the height, or it leaves
+   nothing for the files it is a terminal for. */
+@container fsfm (max-width: 560px) {
+  .fsfm-term { height: 140px; }
+}
+
+/* The strip itself reads as an editable field, which is the only hint that a
+   double click does anything; the controls on it keep their own cursor. */
+.fsfm-crumbs { cursor: text; }
+.fsfm-crumbs button { cursor: pointer; }
+.fsfm-crumbs.is-editing { gap: 8px; }
+
+.fsfm-crumbs-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 5px 8px;
+  color: var(--fsfm-text);
+  font: inherit;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+  background: var(--fsfm-bg-subtle);
+  border: 1px solid var(--fsfm-accent);
+  border-radius: var(--fsfm-radius);
+  outline: none;
+}
+
+.fsfm-crumbs-input:read-only { opacity: 0.7; }
+
+.fsfm-crumbs-error {
+  flex: 0 1 auto;
+  min-width: 0;
+  color: var(--fsfm-danger);
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Icon-only toolbar buttons.
+ *
+ * Twenty-one actions plus the controls only fit one row if each button is a
+ * tight square rather than a text button with its label switched off: the
+ * 10px side padding a labelled button needs is what pushed the group onto a
+ * second line, and what left a visible hole between the magnifier and the
+ * refresh beside it.
+ */
+.fsfm-toolbar .fsfm-tool-icon-only {
+  gap: 0;
+  padding: 6px 7px;
+  justify-content: center;
+}
+
+.fsfm-toolbar .fsfm-tool-icon-only[hidden],
+.fsfm-toolbar .fsfm-tool-separator[hidden] {
+  display: none;
+}

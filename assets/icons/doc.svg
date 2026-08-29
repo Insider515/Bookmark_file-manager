@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="38px" viewBox="0 0 30 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>doc</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#29B4FF" offset="0%"></stop>
+            <stop stop-color="#0070C0" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="doc">
+            <g>
+                <rect id="Rectangle-Copy-19" fill="url(#linearGradient-1)" x="0" y="0" width="30" height="38"></rect>
+                <text id="DOC" font-family="Helvetica-Bold, Helvetica" font-size="10" font-weight="bold" letter-spacing="0.752381" fill="#FFFFFF">
+                    <tspan x="2.76058866" y="12">DOC</tspan>
+                </text>
+            </g>
+            <text id="W" font-family="Helvetica-Bold, Helvetica" font-size="14" font-weight="bold" letter-spacing="1.0533334" fill="#FFFFFF" fill-opacity="0.5">
+                <tspan x="7.36639971" y="29">W</tspan>
+            </text>
+            <rect id="Rectangle" stroke-opacity="0.5" stroke="#FFFFFF" x="5.5" y="15.5" width="17" height="17"></rect>
+        </g>
+    </g>
+</svg>

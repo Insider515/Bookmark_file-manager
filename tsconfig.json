@@ -1,0 +1,23 @@
+{
+  "//": "Type-checks the hand-written .d.ts files. The runtime is plain JS; this only guards the published type surface.",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "strict": true,
+    "noEmit": true,
+    "skipLibCheck": false,
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "types/**/*.d.ts",
+    "test/types/**/*.ts"
+  ]
+}

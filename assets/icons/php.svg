@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="38px" viewBox="0 0 30 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>php</title>
+    <defs>
+        <linearGradient x1="50%" y1="100%" x2="50%" y2="0%" id="linearGradient-1">
+            <stop stop-color="#CE7202" offset="0%"></stop>
+            <stop stop-color="#FFAD00" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="php">
+            <rect id="Rectangle-Copy-12" fill="url(#linearGradient-1)" x="0" y="0" width="30" height="38"></rect>
+            <text id="&lt;php&gt;" font-family="Helvetica-Bold, Helvetica" font-size="8" font-weight="bold" letter-spacing="0.6019048" fill="#FFFFFF" fill-opacity="0.5">
+                <tspan x="1.49328488" y="27">&lt;php&gt;</tspan>
+            </text>
+            <text id="PHP" font-family="Helvetica-Bold, Helvetica" font-size="8.5" font-weight="bold" letter-spacing="0.63952385" fill="#FFFFFF">
+                <tspan x="5.30206676" y="12">PHP</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

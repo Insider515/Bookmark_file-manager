@@ -1,0 +1,13 @@
+node_modules/
+dist/
+demo-dist/
+
+# Runtime data for the demo server; recreated on first start.
+storage/
+
+*.log
+.DS_Store
+
+# Local assistant instructions; not part of the project.
+CLAUDE.md
+.claude/

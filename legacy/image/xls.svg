@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="38px" viewBox="0 0 30 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>xls</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#00A551" offset="0%"></stop>
+            <stop stop-color="#2C7026" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="xls">
+            <g>
+                <rect id="Rectangle-Copy-17" fill="url(#linearGradient-1)" x="0" y="0" width="30" height="38"></rect>
+                <text id="XLS" font-family="Helvetica-Bold, Helvetica" font-size="10" font-weight="bold" letter-spacing="0.752381" fill="#FFFFFF">
+                    <tspan x="4.14730741" y="11">XLS</tspan>
+                </text>
+            </g>
+            <text id="X" font-family="Helvetica-Bold, Helvetica" font-size="14" font-weight="bold" letter-spacing="1.0533334" fill="#FFFFFF" fill-opacity="0.5">
+                <tspan x="10.304388" y="30">X</tspan>
+            </text>
+            <rect id="Rectangle-Copy-33" stroke-opacity="0.5" stroke="#FFFFFF" x="6.5" y="16.5" width="17" height="17"></rect>
+        </g>
+    </g>
+</svg>

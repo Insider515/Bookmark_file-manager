@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="38px" viewBox="0 0 30 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>css</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#FFEC32" offset="0%"></stop>
+            <stop stop-color="#816C16" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="css">
+            <rect id="Rectangle-Copy-3" fill="url(#linearGradient-1)" x="0" y="0" width="30" height="38"></rect>
+            <text id="{/}" font-family="Helvetica-Bold, Helvetica" font-size="14" font-weight="bold" letter-spacing="1.0533334" fill="#FFFFFF" fill-opacity="0.5">
+                <tspan x="6.02693349" y="27">{/}</tspan>
+            </text>
+            <text id="CSS" font-family="Helvetica-Bold, Helvetica" font-size="10" font-weight="bold" letter-spacing="0.752381" fill="#FFFFFF">
+                <tspan x="3.59066678" y="12">CSS</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

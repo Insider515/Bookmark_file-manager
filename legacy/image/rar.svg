@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="38px" viewBox="0 0 30 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>rar</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#B60000" offset="0%"></stop>
+            <stop stop-color="#510101" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="rar">
+            <g>
+                <rect id="Rectangle-Copy-14" fill="url(#linearGradient-1)" x="0" y="0" width="30" height="38"></rect>
+                <text id="RAR" font-family="Helvetica-Bold, Helvetica" font-size="10" font-weight="bold" letter-spacing="0.752381" fill="#FFFFFF">
+                    <tspan x="3.03890897" y="11">RAR</tspan>
+                </text>
+            </g>
+            <g id="file-earmark-zip-copy" transform="translate(7.000000, 16.000000)" fill="#FFFFFF" fill-opacity="0.5" fill-rule="nonzero">
+                <path d="M4,7.5 C4,6.94771525 4.44771525,6.5 5,6.5 L6,6.5 C6.55228475,6.5 7,6.94771525 7,7.5 L7,8.438 L7.4,10.037 C7.50211445,10.4469317 7.33560625,10.8768111 6.984,11.111 L6.054,11.731 C5.71796313,11.9551995 5.28003687,11.9551995 4.944,11.731 L4.015,11.111 C3.6637699,10.8765387 3.49768324,10.4467145 3.6,10.037 L4,8.438 L4,7.5 Z M6,7.5 L5,7.5 L5,8.438 C4.9999914,8.51992306 4.9899159,8.60153463 4.97,8.681 L4.57,10.279 L5.5,10.899 L6.429,10.279 L6.029,8.681 C6.00942108,8.60149278 5.99968149,8.51988181 6,8.438 L6,7.5 Z" id="Shape"></path>
+                <path d="M15,4.5 L15,14 C15,15.1045695 13.8807119,16 12.5,16 L2.5,16 C1.11928813,16 0,15.1045695 0,14 L0,2 C0,0.8954305 1.11928813,0 2.5,0 L9.375,0 L15,4.5 Z M11.4,4.5 C10.3230447,4.5 9.45,3.82842712 9.45,3 L9.45,1 L6.85,1 L6.85,2 L5.55,2 L5.55,3 L6.85,3 L6.85,4 L5.55,4 L5.55,5 L6.85,5 L6.85,6 L4.9,6 L4.9,5 L3.6,5 L3.6,4 L4.9,4 L4.9,3 L3.6,3 L3.6,2 L4.9,2 L4.9,1 L2.3,1 C1.58202983,1 1,1.44771525 1,2 L1,14 C1,14.5522847 1.58202983,15 2.3,15 L12.7,15 C13.4179702,15 14,14.5522847 14,14 L14,4.5 L11.4,4.5 Z" id="Shape"></path>
+            </g>
+        </g>
+    </g>
+</svg>

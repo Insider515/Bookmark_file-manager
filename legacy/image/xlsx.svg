@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="38px" viewBox="0 0 30 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>xlsx</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#00A551" offset="0%"></stop>
+            <stop stop-color="#2C7026" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="xlsx">
+            <rect id="Rectangle-Copy-18" fill="url(#linearGradient-1)" x="0" y="0" width="30" height="38"></rect>
+            <text id="XLSX" font-family="Helvetica-Bold, Helvetica" font-size="8.5" font-weight="bold" letter-spacing="0.63952385" fill="#FFFFFF">
+                <tspan x="2.62073257" y="11">XLSX</tspan>
+            </text>
+            <rect id="Rectangle-Copy-22" fill-opacity="0.5" fill="#FFFFFF" x="12" y="15" width="5" height="5"></rect>
+            <rect id="Rectangle-Copy-25" fill-opacity="0.5" fill="#FFFFFF" x="12" y="22" width="5" height="5"></rect>
+            <rect id="Rectangle-Copy-28" fill-opacity="0.5" fill="#FFFFFF" x="12" y="29" width="5" height="5"></rect>
+            <rect id="Rectangle-Copy-24" fill-opacity="0.5" fill="#FFFFFF" x="20" y="15" width="5" height="5"></rect>
+            <rect id="Rectangle-Copy-26" fill-opacity="0.5" fill="#FFFFFF" x="20" y="22" width="5" height="5"></rect>
+            <rect id="Rectangle-Copy-29" fill-opacity="0.5" fill="#FFFFFF" x="20" y="29" width="5" height="5"></rect>
+            <rect id="Rectangle-Copy-23" fill-opacity="0.5" fill="#FFFFFF" x="4" y="15" width="5" height="5"></rect>
+            <rect id="Rectangle-Copy-27" fill-opacity="0.5" fill="#FFFFFF" x="4" y="22" width="5" height="5"></rect>
+            <rect id="Rectangle-Copy-30" fill-opacity="0.5" fill="#FFFFFF" x="4" y="29" width="5" height="5"></rect>
+        </g>
+    </g>
+</svg>

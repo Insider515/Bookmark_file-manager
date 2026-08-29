@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="38px" viewBox="0 0 30 38" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>jpeg</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#326FFF" offset="0%"></stop>
+            <stop stop-color="#002887" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="jpeg">
+            <g>
+                <rect id="Rectangle-Copy-9" fill="url(#linearGradient-1)" x="0" y="0" width="30" height="38"></rect>
+                <text id="JPEG" font-family="Helvetica-Bold, Helvetica" font-size="8.5" font-weight="bold" letter-spacing="0.63952385" fill="#FFFFFF">
+                    <tspan x="2.38208511" y="12">JPEG</tspan>
+                </text>
+            </g>
+            <rect id="Rectangle-Copy-21" stroke-opacity="0.5" stroke="#FFFFFF" x="6.5" y="15.5" width="17" height="17"></rect>
+            <line x1="8.5" y1="17.5" x2="21.5" y2="30.5" id="Line" stroke-opacity="0.5" stroke="#FFFFFF" stroke-linecap="round" transform="translate(15.000000, 24.000000) scale(-1, 1) translate(-15.000000, -24.000000) "></line>
+        </g>
+    </g>
+</svg>

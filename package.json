@@ -1,0 +1,102 @@
+{
+  "name": "bookmark-file-manager",
+  "version": "1.0.0",
+  "description": "Embeddable file manager: a dependency-free front-end widget and a framework-free Node handler over a real filesystem",
+  "homepage": "https://github.com/Insider515/Bookmark_file-manager#readme",
+  "bugs": {
+    "url": "https://github.com/Insider515/Bookmark_file-manager/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Insider515/Bookmark_file-manager.git"
+  },
+  "author": "Developer_515 <117070894+Insider515@users.noreply.github.com>",
+  "type": "module",
+  "license": "MIT",
+  "main": "./dist/bookmark-file-manager.umd.cjs",
+  "module": "./dist/bookmark-file-manager.js",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "import": "./dist/bookmark-file-manager.js",
+      "require": "./dist/bookmark-file-manager.umd.cjs"
+    },
+    "./style.css": "./dist/bookmark-file-manager.css",
+    "./server": {
+      "types": "./types/server.d.ts",
+      "import": "./server/index.js"
+    },
+    "./assets/*": "./assets/*",
+    "./package.json": "./package.json"
+  },
+  "typesVersions": {
+    "*": {
+      "server": [
+        "./types/server.d.ts"
+      ]
+    }
+  },
+  "files": [
+    "dist",
+    "types",
+    "server",
+    "!server/standalone.js",
+    "assets",
+    "LICENSE",
+    "README.md"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "scripts": {
+    "dev": "node server/standalone.js --vite",
+    "build": "vite build",
+    "build:demo": "vite build --mode demo",
+    "serve": "node server/standalone.js",
+    "start": "npm run build:demo && node server/standalone.js",
+    "test": "node --test test/*.test.js",
+    "typecheck": "tsc --noEmit",
+    "gen:icons": "node scripts/gen-icons.mjs",
+    "prepublishOnly": "npm run build && npm test && npm run typecheck"
+  },
+  "dependencies": {
+    "busboy": "^1.6.0"
+  },
+  "peerDependencies": {
+    "sharp": "^0.33.0 || ^0.34.0 || ^0.35.0"
+  },
+  "peerDependenciesMeta": {
+    "sharp": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.25",
+    "@types/node": "^22.20.1",
+    "bootstrap-icons": "^1.10.5",
+    "express": "^4.21.2",
+    "sharp": "^0.35.4",
+    "typescript": "^5.9.3",
+    "vite": "^5.4.11"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "types": "./types/index.d.ts",
+  "keywords": [
+    "file-manager",
+    "file-browser",
+    "file-explorer",
+    "widget",
+    "filesystem",
+    "upload",
+    "download",
+    "vanilla-js",
+    "express",
+    "adonisjs",
+    "fastify",
+    "zip",
+    "i18n",
+    "no-dependencies"
+  ]
+}
