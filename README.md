@@ -9,6 +9,12 @@
 An embeddable file manager: a dependency-free front-end widget and a framework-free
 Node handler over a real filesystem.
 
+**Published on npm — [`bookmark-file-manager`](https://www.npmjs.com/package/bookmark-file-manager):**
+
+```bash
+npm install bookmark-file-manager
+```
+
 - **The widget** is a plain JS class that mounts into any DOM element. It drags in no
   Bootstrap, no jQuery, no icon font, nothing at all: zero runtime dependencies.
   The build is 98 KB of JS and 7 KB of CSS gzipped, of which ~26 KB is the four
