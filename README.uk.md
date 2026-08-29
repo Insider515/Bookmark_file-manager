@@ -1765,4 +1765,4 @@ import { createFileManagerHandler, type AuthorizeContext } from 'bookmark-file-m
 
 ## Ліцензія
 
-MIT © Developer_515. Значки панелі — [Bootstrap Icons](https://icons.getbootstrap.com/), MIT.
+MIT © Mykhailo Kravtsov. Значки панелі — [Bootstrap Icons](https://icons.getbootstrap.com/), MIT.

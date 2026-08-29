@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/Insider515/Bookmark_file-manager.git"
   },
-  "author": "Developer_515 <117070894+Insider515@users.noreply.github.com>",
+  "author": "Mykhailo Kravtsov <117070894+Insider515@users.noreply.github.com>",
   "type": "module",
   "license": "MIT",
   "main": "./dist/bookmark-file-manager.umd.cjs",

@@ -1738,5 +1738,5 @@ request and response objects.
 
 ## Licence
 
-MIT © Developer_515. Toolbar icons are [Bootstrap Icons](https://icons.getbootstrap.com/),
+MIT © Mykhailo Kravtsov. Toolbar icons are [Bootstrap Icons](https://icons.getbootstrap.com/),
 MIT.
