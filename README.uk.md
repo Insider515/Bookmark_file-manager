@@ -1,5 +1,11 @@
 # Bookmark_file-manager
 
+[![npm](https://img.shields.io/npm/v/bookmark-file-manager)](https://www.npmjs.com/package/bookmark-file-manager)
+[![npm downloads](https://img.shields.io/npm/dm/bookmark-file-manager)](https://www.npmjs.com/package/bookmark-file-manager)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/bookmark-file-manager)](https://bundlephobia.com/package/bookmark-file-manager)
+[![no dependencies](https://img.shields.io/badge/dependencies-1-brightgreen)](https://www.npmjs.com/package/bookmark-file-manager?activeTab=dependencies)
+[![licence](https://img.shields.io/npm/l/bookmark-file-manager)](LICENSE)
+
 Вбудовуваний файловий менеджер: фронтенд-віджет без залежностей і Express-роутер поверх
 реальної файлової системи. Усі вісім операцій панелі — робочі.
 
