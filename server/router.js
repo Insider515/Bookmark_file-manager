@@ -1076,6 +1076,8 @@ export function createFileManagerHandler(options = {}) {
         let fileCount = 0;
         let sawFile = false;
         let receivedBytes = 0;
+        /** Parts still being read, so an abort can put an end to them. */
+        const live = new Set();
 
         const bb = busboy({
           headers: req.headers,
@@ -1089,8 +1091,20 @@ export function createFileManagerHandler(options = {}) {
         const settle = (err) => {
           if (settled) return;
           settled = true;
-          if (err) reject(err);
-          else resolve();
+          if (err) {
+            // A request that dies mid-part leaves busboy silent: the part
+            // stream gets no 'end', no 'error' and no 'close'. Whoever is
+            // writing it then waits for ever, and its two half-finished files
+            // — the temp copy and the reserved destination name — are never
+            // cleaned up. Three cancelled uploads left three empty
+            // `report.pdf`s in the user's folder. Ending the part here is what
+            // lets writeUpload fail and clean up after itself.
+            for (const part of live) part.destroy(err);
+            live.clear();
+            reject(err);
+          } else {
+            resolve();
+          }
         };
 
         const maybeDone = () => {
@@ -1127,6 +1141,8 @@ export function createFileManagerHandler(options = {}) {
             return;
           }
           pending += 1;
+          live.add(stream);
+          stream.once('close', () => live.delete(stream));
           // busboy truncates at the size limit rather than erroring; catch that
           // so the client is told the file was rejected instead of silently
           // receiving a partial upload.

@@ -361,7 +361,6 @@ export class FileManager extends Emitter {
       this.#terminal = new Terminal({
         t: this.t,
         errorText: (err) => this.#errorText(err),
-      errorText: (err) => this.#errorText(err),
         localeTag: this.#locale.tag,
         provider: this.provider,
         path: this.#currentPath,
@@ -978,8 +977,6 @@ export class FileManager extends Emitter {
       errorText: (err) => this.#errorText(err),
       container: this.root,
       provider: this.provider,
-      t: this.t,
-      errorText: (err) => this.#errorText(err),
       title: this.t('prompt.moveTitle', { what: this.#describe(selection) }),
       confirmText: this.t('action.move'),
       currentPath: this.#currentPath,
@@ -1024,8 +1021,6 @@ export class FileManager extends Emitter {
       errorText: (err) => this.#errorText(err),
       container: this.root,
       provider: this.provider,
-      t: this.t,
-      errorText: (err) => this.#errorText(err),
       title: this.t('prompt.copyTitle', { what: this.#describe(selection) }),
       confirmText: this.t('action.copy'),
       currentPath: this.#currentPath,
@@ -1104,7 +1099,6 @@ export class FileManager extends Emitter {
         container: this.root,
         t: this.t,
         errorText: (err) => this.#errorText(err),
-      errorText: (err) => this.#errorText(err),
         title: this.t('prompt.deleteTitle'),
         message:
           selection.length === 1
@@ -1196,8 +1190,6 @@ export class FileManager extends Emitter {
       t: this.t,
       errorText: (err) => this.#errorText(err),
       container: this.root,
-      t: this.t,
-      errorText: (err) => this.#errorText(err),
       title: this.t('toast.uploading', { n: this.t('count.files', { n: accepted.length }) }),
       onCancel: () => controller.abort(),
     });
@@ -1686,8 +1678,6 @@ export class FileManager extends Emitter {
         promptDialog({
           t: this.t,
           errorText: (err) => this.#errorText(err),
-        errorText: (err) => this.#errorText(err),
-      errorText: (err) => this.#errorText(err),
           container: this.root,
           title: message,
           label: this.t('nav.pathLabel'),

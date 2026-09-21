@@ -227,7 +227,14 @@ export function createRouter({ basePath = '', jsonLimit } = {}) {
       }
     } catch (err) {
       for (const fn of errorHandlers) {
-        await fn(err, req, res, () => {});
+        try {
+          await fn(err, req, res, () => {});
+        } catch {
+          // An error handler that throws must not take the response with it.
+          // Escaping this loop left `handle` rejecting into nothing and the
+          // socket open until the client gave up — a hang instead of a 500.
+          break;
+        }
       }
       if (!res.writableEnded && !res.headersSent) {
         res.status(500).json({ error: 'Internal server error', code: 'INTERNAL' });
