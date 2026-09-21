@@ -1,6 +1,6 @@
 {
   "name": "bookmark-file-manager",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Embeddable file manager: a dependency-free front-end widget and a framework-free Node handler over a real filesystem",
   "homepage": "https://github.com/Insider515/Bookmark_file-manager#readme",
   "bugs": {
