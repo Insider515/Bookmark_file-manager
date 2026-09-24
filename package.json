@@ -37,6 +37,7 @@
     }
   },
   "files": [
+    "llms.txt",
     "dist",
     "types",
     "server",

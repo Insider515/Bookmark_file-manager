@@ -1,0 +1,226 @@
+# bookmark-file-manager
+
+> An embeddable file manager: a dependency-free front-end widget and a framework-free Node
+> handler over a real filesystem. It browses, uploads, downloads, previews, searches,
+> archives and edits files under one root directory — with a folder tree, thumbnails, a
+> code editor, a spreadsheet editor, a document editor and a terminal. Published on npm as
+> `bookmark-file-manager` (MIT, Node >= 18; repository name: Bookmark_file-manager).
+
+**The two halves are independent.** The widget is a plain JS class that mounts into any DOM
+element: no Bootstrap, no jQuery, no icon font, zero runtime dependencies, 98 KB JS + 7 KB
+CSS gzipped (~26 KB of that is the four non-English languages). It works in React, Vue,
+Angular, Svelte or no framework at all, because it is just the DOM. The back end is a
+single `(req, res)` function that mounts in Express, AdonisJS, Fastify, Nest or bare
+`node:http`; it starts no server of its own and keeps no global state. Its one dependency
+is busboy; `sharp` is an optional peer, needed only for thumbnails and tiff/heic rendering.
+
+**Install**
+
+```bash
+npm install bookmark-file-manager
+```
+
+**Quick start**
+
+```js
+// server
+import express from 'express';
+import { createFileManagerRouter } from 'bookmark-file-manager/server';
+
+const app = express();
+app.use('/api/files', createFileManagerRouter({ root: './storage' }));
+app.listen(3000);
+```
+
+```js
+// client
+import { FileManager } from 'bookmark-file-manager';
+import 'bookmark-file-manager/style.css';
+
+const manager = new FileManager('#file-manager', { endpoint: '/api/files' });
+```
+
+The container needs a height (`<div id="file-manager" style="height: 600px"></div>`) — the
+widget fills it completely.
+
+**What it does.** Eight primary operations — new folder, new file, move, copy, rename,
+delete, download (a file streams; a folder or multi-selection becomes a ZIP on the fly),
+upload (multiple files, progress, cancellation, drag & drop). Their buttons are off the
+toolbar by default and reached from the context menu and keyboard; `toolbarActions: true`
+brings them back. Besides that: a lazily loaded folder tree, image thumbnails in the tiles
+and a viewer for images and PDFs, properties and permission changes, 13 archive formats,
+recursive search including inside file contents, a terminal with the manager's own
+commands, spreadsheet editing (csv/xlsx/xls/ods), document editing (docx/odt/doc and PDF
+page operations), a code editor with highlighting, grid and list views, breadcrumbs that
+double-click into a typable address bar, full keyboard navigation and selection, a status
+bar, five languages and light/dark themes.
+
+**Widget options** (`new FileManager(target, options)`; `target` is an element or selector)
+
+```js
+{
+  endpoint: '/api/files',   // base of the REST API
+  provider: null,           // your own data source instead of HTTP
+  locale: null,             // 'en' | 'uk' | 'es' | 'de' | 'fr' | your dictionary
+  theme: null,              // colours, fonts and metrics
+  rootLabel: null,          // label of the root in the tree and crumbs
+  initialPath: '/',
+  view: 'grid',             // 'grid' | 'list'
+  iconBasePath: null,       // folder of per-extension artwork; null draws the icons
+  permissions: null,        // { create, upload, move, copy, rename, remove, download, chmod }
+  customizeThumbnail: null, // (entry) => URL | '<svg…>' | null
+  preview: true,            // images and PDFs in a viewer over the widget
+  thumbnails: true,
+  sheets: true,             // csv/xlsx/xls/ods open in the spreadsheet editor
+  code: true,               // text and source files open in the code editor
+  documents: true,          // docx/odt/doc, and pdf page by page
+  search: true,             // magnifier, Enter in the filter, Ctrl+Shift+F
+  terminal: true,           // bottom panel; its button and Ctrl+` hide it
+  showTree: true,  showToolbar: true,  toolbarActions: false,
+  showStatusBar: true,  showSearch: true,  confirmDelete: true,
+  headers: null,            // object or function — for authorisation tokens
+  credentials: 'same-origin',
+}
+```
+
+Client `permissions` remove the buttons of withheld operations rather than greying them
+out; the server declares its own set in `/config` and the **intersection** applies — the
+client cannot allow what the server forbids. Read the result with `manager.permissions` and
+`manager.can('remove')`.
+
+**Methods**
+
+```js
+await manager.ready;                 // the first listing is on screen
+manager.navigate('/Documents');      manager.navigateUp();     manager.refresh();
+manager.open(entry);                 manager.preview(entry?);
+manager.showProperties();            manager.editPermissions();
+manager.setExecutable(true);
+manager.compress();                  manager.extract(entry);   manager.showArchiveContents(entry);
+manager.openSheet(entry);            manager.openCode(entry);
+manager.copyPath(path?);             manager.setView('list');
+manager.getSelection();              manager.currentPath;      manager.readOnly;
+manager.permissions;                 manager.can('remove');
+manager.createFolder();  manager.createFile();  manager.moveSelection();
+manager.copySelection(); manager.renameSelection(); manager.deleteSelection();
+manager.downloadSelection(); manager.upload();
+manager.destroy();                   // removes everything, listeners included
+```
+
+**Events.** `ready`, `navigate`, `selectionchange`, `open`, `created`, `renamed`, `moved`,
+`copied`, `deleted`, `uploaded`, `download`, `viewchange`, `preview`, `chmod`, `archived`,
+`extracted`, `codeopen`, `codesaved`, `sheetopen`, `sheetsaved`, `pathcopied`, `error`.
+`on()` returns a function that unsubscribes.
+
+**Handler options** (`createFileManagerRouter(options)` from `bookmark-file-manager/server`)
+
+```js
+{
+  root: './storage',                      // required; created if missing
+  readOnly: false,
+  permissions: { create: true, upload: true, move: true, copy: true, rename: true,
+                 remove: true, download: true, chmod: false, archive: true,
+                 extract: true, edit: true },   // chmod is forbidden by default
+  maxUploadSize: 100 * 1024 * 1024,       // per file
+  maxUploadFiles: 50,                     // per request
+  maxRequestSize: 1024 * 1024 * 1024,
+  maxConcurrentUploads: 8,                // beyond that, 503
+  maxBatchPaths: 1000,                    // per move/copy/delete/download/chmod
+  maxSizeWalkEntries: 200000,
+  archiveTools: true,                     // without external tools: zip, tar, tar.gz, gz
+  archiveLimits: { maxEntries: 100000, maxTotalBytes: 5 * 1024 ** 3,
+                   maxEntrySize: 2 * 1024 ** 3, toolTimeout: 10 * 60 * 1000 },
+  minFreeSpace: 64 * 1024 * 1024,
+  maxListEntries: 50000,                  // 0 means no ceiling
+  maxTreeChildren: 2000,
+  concurrency: 32,
+  exposeUsage: false,                     // free space is the server's disk, not the user's
+  thumbnails: true,
+  thumbnailSizes: [64, 128, 256],         // a whitelist, not a hint
+  maxRawThumbnailSize: 512 * 1024,
+  thumbnailPixelLimit: 50 * 1024 * 1024,  // decompression-bomb guard, in pixels
+  maxConcurrentThumbnails: 4,  maxQueuedThumbnails: 64,
+  allowedOrigins: ['https://dashboard.example'],  // same-origin only by default
+  authorize: (req, action, context) => true,      // context = { route, paths, destination, name }
+  onWarning: (message, detail) => {},
+}
+```
+
+**REST API.** `GET /config`, `/list?path=`, `/tree?path=&depth=`, `/stat?path=`,
+`/thumbnail?path=&size=`, `/render?path=&width=`, `/properties?path=&size=`,
+`/archive/list?path=`, `/sheet?path=`, `/document?path=`, `/search?path=&query=&mode=…`,
+`/text?path=`, `/download?paths=…`. `POST /directory`, `/file`, `/rename`, `/move`,
+`/copy`, `/delete`, `/chmod`, `/archive`, `/extract`, `/sheet/save`, `/document/save`,
+`/document/pages`, `/text/save`, `/upload?path=`. All paths are **virtual**, relative to
+`root` (`/Documents/report.txt`); absolute server paths never appear in a response.
+`/download` and the image routes honour `Range` and `ETag`/`If-None-Match`. Errors come
+back as `{ error, code }` with a meaningful status — `INVALID_NAME`, `INVALID_PATH`,
+`OUTSIDE_ROOT`, `NOT_FOUND`, `EXISTS`, `READ_ONLY`, `PERMISSION_DENIED`, `INTO_SELF`,
+`TOO_LARGE`, `NO_SPACE`, `CROSS_ORIGIN`, `TOO_MANY`, `BUSY`, plus families for archives
+(`NOT_AN_ARCHIVE`, `ARCHIVE_TOO_LARGE`, `ARCHIVE_TIMEOUT`, …), sheets (`NOT_A_SHEET`,
+`TOO_MANY_CELLS`, …), documents (`NOT_A_DOCUMENT`, `PDF_ENCRYPTED`, …) and search
+(`INVALID_REGEX`, `SEARCH_FAILED`, …).
+
+**Path rules.** A path being addressed is rejected only for a NUL byte or `..` (including
+the backslash spelling); everything else the filesystem allows is shown as it is, because
+`report?.txt` and `note:2026.md` are ordinary names on Linux and macOS. Names the client
+asks to **create** are stricter — `/ \ : * ? " < > |` and control characters are refused
+(`INVALID_NAME`), so a file created here survives being copied to Windows.
+
+**Archives.** Thirteen formats. Own implementations for zip (Zip64 reader and writer) and
+tar; `zlib` for gz and tar.gz; external tools for bz2, xz, zst, 7z and rar. RAR is
+read-only. Extraction is guarded against traversal, bombs and runaway tools by
+`archiveLimits`.
+
+**Search** runs in a worker thread so a recursive walk cannot block the event loop. Masks,
+regular expressions, extension filters, files-only or folders-only, and inside file
+contents. The same engine backs the terminal's `find` and `grep`.
+
+**Terminal commands.** `help`, `pwd`, `ls [-l]`, `cd`, `cat`, `stat`, `du`, `tree`, `find`,
+`grep`, `mkdir`, `touch`, `rm`, `cp`, `mv`, `chmod`, `open`, `download`, `clear`.
+
+**Your own data source.** The widget talks to a *provider*, not to `fetch` directly. Pass
+an object implementing `config`, `list`, `tree`, `stat`, `createDirectory`, `createFile`,
+`rename`, `move`, `copy`, `remove`, `upload` and `downloadUrl` to run it against S3, your
+own RPC, or anything else. An entry is `{ name, path, isDirectory, size, modified }`.
+
+**Languages and themes.** English (default), Ukrainian, Spanish, German, French, or your
+own dictionary; server messages are translated by code, not by string matching. Light and
+dark themes, with colours, fonts and metrics set at integration time or through plain CSS;
+the layout adapts to its container's width and honours `prefers-reduced-motion`.
+
+**Limitations.** ZIP is written without encryption and without unix permissions. A move
+across devices is a copy plus a delete, so it is not atomic. Listings are chunked but not
+virtualised — for directories of hundreds of thousands of entries, lean on search and
+`maxListEntries`. No PDF thumbnails (PDFs open in the viewer). Large `.bmp` files get no
+thumbnail. Animated gif/webp show their first frame in a tile and play in the viewer.
+
+## Documentation
+
+- [README](https://raw.githubusercontent.com/Insider515/Bookmark_file-manager/master/README.md): the complete manual — every option, route, event, limit and failure mode, with the reasoning behind the defaults
+- [README (Ukrainian)](https://raw.githubusercontent.com/Insider515/Bookmark_file-manager/master/README.uk.md): the same text in Ukrainian
+- [LICENSE](https://raw.githubusercontent.com/Insider515/Bookmark_file-manager/master/LICENSE): MIT
+
+## API reference
+
+- [types/index.d.ts](https://raw.githubusercontent.com/Insider515/Bookmark_file-manager/master/types/index.d.ts): the widget's full typed surface — options, methods, events, provider shape
+- [types/server.d.ts](https://raw.githubusercontent.com/Insider515/Bookmark_file-manager/master/types/server.d.ts): handler options, `FsOps`, archive and search helpers
+- [src/index.js](https://raw.githubusercontent.com/Insider515/Bookmark_file-manager/master/src/index.js): every client export, annotated
+- [server/index.js](https://raw.githubusercontent.com/Insider515/Bookmark_file-manager/master/server/index.js): every server export, annotated
+- [server/router.js](https://raw.githubusercontent.com/Insider515/Bookmark_file-manager/master/server/router.js): the REST routes end to end, with their guards
+- [package.json](https://raw.githubusercontent.com/Insider515/Bookmark_file-manager/master/package.json): entry points, exports map, peer dependencies
+
+## Examples
+
+- [demo/main.js](https://raw.githubusercontent.com/Insider515/Bookmark_file-manager/master/demo/main.js): a working page with language, theme and option controls
+- [demo/index.html](https://raw.githubusercontent.com/Insider515/Bookmark_file-manager/master/demo/index.html): the markup it mounts into
+- [server/standalone.js](https://raw.githubusercontent.com/Insider515/Bookmark_file-manager/master/server/standalone.js): the demo server, and a minimal `node:http` mount
+
+## Optional
+
+- [npm package](https://www.npmjs.com/package/bookmark-file-manager): published releases
+- [GitHub repository](https://github.com/Insider515/Bookmark_file-manager): issues and source
+- [server/safe-path.js](https://raw.githubusercontent.com/Insider515/Bookmark_file-manager/master/server/safe-path.js): how virtual paths are resolved and confined to the root
+- [server/fs-ops.js](https://raw.githubusercontent.com/Insider515/Bookmark_file-manager/master/server/fs-ops.js): the filesystem operations behind the routes
+- [server/search.js](https://raw.githubusercontent.com/Insider515/Bookmark_file-manager/master/server/search.js): the search engine and its limits
+- [test/types/consumer.ts](https://raw.githubusercontent.com/Insider515/Bookmark_file-manager/master/test/types/consumer.ts): TypeScript usage checked in CI
