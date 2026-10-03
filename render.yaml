@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: bookmark-file-manager-demo
+    runtime: node
+    plan: free
+    branch: master
+    # express, vite and sharp live in devDependencies, which Render skips by default
+    buildCommand: npm install --include=dev && npm run build:demo
+    # --read-only keeps a public demo from being filled up by visitors
+    startCommand: node server/standalone.js --read-only
+    healthCheckPath: /
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: FM_HOST
+        value: 0.0.0.0
+      - key: FM_ROOT
+        value: /tmp/storage
