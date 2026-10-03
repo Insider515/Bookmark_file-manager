@@ -36,11 +36,37 @@ const host = String(arg('host', process.env.FM_HOST || '127.0.0.1'));
 const allowChmod = arg('chmod', false) === true;
 const useVite = process.argv.includes('--vite');
 
-/** Seed a sample tree the first time, so the demo is not an empty window. */
+/**
+ * Copy a directory tree, creating the destination folders on the way.
+ * Used instead of fs.cp, which is still flagged experimental on Node 20.
+ */
+async function copyTree(from, to) {
+  await fs.mkdir(to, { recursive: true });
+  for (const entry of await fs.readdir(from, { withFileTypes: true })) {
+    if (entry.name === '.DS_Store') continue;
+    const source = path.join(from, entry.name);
+    const target = path.join(to, entry.name);
+    if (entry.isDirectory()) await copyTree(source, target);
+    else if (entry.isFile()) await fs.copyFile(source, target);
+  }
+}
+
+/**
+ * Seed a sample tree the first time, so the demo is not an empty window.
+ * Real documents, pictures and code come from demo-seed/ when that folder is
+ * in the checkout; the plain text files below are added in either case.
+ */
 async function seed(root) {
   await fs.mkdir(root, { recursive: true });
   const existing = await fs.readdir(root);
   if (existing.length > 0) return;
+
+  const samples = path.join(projectRoot, 'demo-seed');
+  try {
+    await copyTree(samples, root);
+  } catch (error) {
+    if (error.code !== 'ENOENT') throw error;
+  }
 
   const layout = {
     'Documents/Projects/About.rtf': 'A demonstration file.\n',
@@ -48,7 +74,7 @@ async function seed(root) {
     'Documents/About.xml': '<?xml version="1.0"?>\n<about>demo</about>\n',
     'Documents/ToDo.txt': 'Check all eight toolbar buttons.\n',
     'Documents/System/Employees.txt': 'Ivanenko\nPetrenko\n',
-    'Images/notes.txt': 'Images can be uploaded here with the Upload button.\n',
+    'Images/notes.txt': 'Pictures can be added here with the Upload button.\n',
     'Downloads/archive.txt': 'An empty placeholder.\n',
   };
   for (const [relative, content] of Object.entries(layout)) {

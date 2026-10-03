@@ -1,0 +1,6 @@
+id,item,category,quantity,unit_price,status
+1,Laptop stand,Office,24,39.90,In stock
+2,Mechanical keyboard,Peripherals,12,89.00,In stock
+3,USB-C hub,Peripherals,0,45.50,Out of stock
+4,Desk lamp,Office,37,24.99,In stock
+5,Headset,Audio,6,149.00,Low stock

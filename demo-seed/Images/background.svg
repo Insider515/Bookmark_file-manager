@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1920px" height="1080px" viewBox="0 0 1920 1080" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>auth-background</title>
+    <defs>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#454C53" offset="0%"></stop>
+            <stop stop-color="#212529" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="28.2278671%" y1="36.2770034%" x2="39.7798069%" y2="49.9092102%" id="linearGradient-2">
+            <stop stop-color="#083454" offset="0%"></stop>
+            <stop stop-color="#0569AF" offset="100%"></stop>
+        </linearGradient>
+        <linearGradient x1="68.0610894%" y1="80.4457384%" x2="16.6607142%" y2="27.1428283%" id="linearGradient-3">
+            <stop stop-color="#E76223" offset="0%"></stop>
+            <stop stop-color="#843611" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Page-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="auth-background" fill-rule="nonzero">
+            <rect id="Rectangle" fill="#262A2C" x="0" y="0" width="511" height="1079"></rect>
+            <g id="Fill-3" transform="translate(339, 0)" fill="url(#linearGradient-1)">
+                <path d="M20.8562487,858.723749 C20.8669701,858.79725 59.667265,932.556 137.257134,1080 L1420.50851,1080 L1581,1080 L1581,0 L1125.17611,0 L84.8571361,626.53275 C38.8877825,652.09275 6.40086847,700.10775 0.784357497,759.638249 C-2.59881595,795.658499 5.12237858,830.078999 20.8562487,858.723749 Z" id="path-1"></path>
+            </g>
+            <path d="M487.647778,0 C397.002829,343.773643 325.446,615.134349 325.407796,615.273803 C302.56358,701.95385 318.494812,790.73921 361.740174,859 C359.214662,846.377107 357.143582,833.718226 355.929085,821.039101 C355.297707,817.397537 354.893544,814.300294 354.762845,811.963304 C354.601985,809.032508 354.61606,806.112958 354.567801,803.200155 C353.22233,734.192519 380.317955,668.523371 430.773541,627.789347 C439.208494,620.979605 448.296304,614.866743 458.013233,609.551665 L1469,0 L487.647778,0 Z" id="Mask" fill="url(#linearGradient-2)"></path>
+            <path d="M1355.8997,755.642484 C1431.17503,680.617482 1619.20846,600.736654 1920,516 L1920,1080 L1420.49353,1079.23654 C1302.15565,938.532171 1280.62438,830.667487 1355.8997,755.642484 Z" id="Rectangle" fill="url(#linearGradient-3)"></path>
+        </g>
+    </g>
+</svg>
