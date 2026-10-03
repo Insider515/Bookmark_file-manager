@@ -6,8 +6,9 @@ services:
     branch: master
     # express, vite and sharp live in devDependencies, which Render skips by default
     buildCommand: npm install --include=dev && npm run build:demo
-    # --read-only keeps a public demo from being filled up by visitors
-    startCommand: node server/standalone.js --read-only
+    # Full read-write so visitors can try uploads; the free plan's /tmp is
+    # wiped whenever the instance restarts, so the demo tree resets by itself.
+    startCommand: node server/standalone.js
     healthCheckPath: /
     envVars:
       - key: NODE_VERSION
