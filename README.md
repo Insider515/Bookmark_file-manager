@@ -30,6 +30,11 @@ npm install bookmark-file-manager
      referenced here and in README.uk.md, so nothing else needs changing. -->
 ![The file manager](docs/screenshot.png)
 
+**[Live demo](https://bookmark-file-manager-demo.onrender.com/)** — a full read-write
+copy with sample documents, pictures, code and an archive in it. It runs on a free
+instance that sleeps when nobody is using it, so the first request may take up to a
+minute; anything you change there is wiped when the instance restarts.
+
 > 🇺🇦 [Ця сторінка українською](README.uk.md)
 
 ---
